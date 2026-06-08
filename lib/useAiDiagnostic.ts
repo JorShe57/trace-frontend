@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { diagnoseStep } from '@/lib/api/client';
 import { TREE, ROOT_ID } from '@/lib/engine';
 import type {
@@ -47,6 +47,64 @@ export interface AiDiagnostic {
   back: () => void;
   restart: () => void;
   retry: () => void;
+  /** Drop the persisted resume snapshot for this job (e.g. once saved). */
+  clearResume: () => void;
+}
+
+/* Per-job resume: an in-progress AI diagnostic is mirrored into localStorage so
+ * clicking "Diagnose" on the same job picks up where you left off instead of
+ * starting over. Only stable (non-loading) states are persisted; the snapshot
+ * is cleared on Restart and once the outcome is saved as a report. */
+
+interface AiSnapshot {
+  v: number;
+  phase: AiPhase;
+  unit: UnitOption | null;
+  equipment: EquipmentContext;
+  complaint: string | null;
+  answered: AnsweredStep[];
+  current: AiDiagnosticStep | null;
+  source: 'claude' | 'unavailable' | null;
+  model?: string;
+  promptVersion?: string;
+}
+
+const AI_KEY_PREFIX = 'trace.ai.';
+const SNAPSHOT_VERSION = 1;
+
+function aiKey(jobId: string): string {
+  return `${AI_KEY_PREFIX}${jobId}`;
+}
+
+function loadAiSnapshot(jobId: string): AiSnapshot | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(aiKey(jobId));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as AiSnapshot;
+    if (parsed && parsed.v === SNAPSHOT_VERSION) return parsed;
+  } catch {
+    /* corrupt or unavailable storage — ignore and start fresh */
+  }
+  return null;
+}
+
+function saveAiSnapshot(jobId: string, snap: Omit<AiSnapshot, 'v'>): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(aiKey(jobId), JSON.stringify({ v: SNAPSHOT_VERSION, ...snap }));
+  } catch {
+    /* storage may be full or unavailable (private mode) — non-fatal */
+  }
+}
+
+export function clearAiSnapshot(jobId: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(aiKey(jobId));
+  } catch {
+    /* ignore */
+  }
 }
 
 function unitOptions(): UnitOption[] {
@@ -68,20 +126,44 @@ function complaintOptions(unit: UnitOption | null): ComplaintOption[] {
  * AI steps are generated, not addressable nodes — but `back` is instant because
  * we keep every answered question, so popping never re-calls the model.
  */
-export function useAiDiagnostic(): AiDiagnostic {
-  const [phase, setPhase] = useState<AiPhase>('equipment');
-  const [unit, setUnit] = useState<UnitOption | null>(null);
-  const [equipment, setEquipmentState] = useState<EquipmentContext>({});
-  const [complaint, setComplaint] = useState<string | null>(null);
-  const [answered, setAnswered] = useState<AnsweredStep[]>([]);
-  const [current, setCurrent] = useState<AiDiagnosticStep | null>(null);
+export function useAiDiagnostic(jobId?: string): AiDiagnostic {
+  // Resume snapshot read once at mount. The component gates this hook behind a
+  // client-only mount check, so reading localStorage here is SSR-safe and
+  // doesn't cause a hydration mismatch.
+  const saved = useMemo(() => (jobId ? loadAiSnapshot(jobId) : null), [jobId]);
+
+  const [phase, setPhase] = useState<AiPhase>(saved?.phase ?? 'equipment');
+  const [unit, setUnit] = useState<UnitOption | null>(saved?.unit ?? null);
+  const [equipment, setEquipmentState] = useState<EquipmentContext>(saved?.equipment ?? {});
+  const [complaint, setComplaint] = useState<string | null>(saved?.complaint ?? null);
+  const [answered, setAnswered] = useState<AnsweredStep[]>(saved?.answered ?? []);
+  const [current, setCurrent] = useState<AiDiagnosticStep | null>(saved?.current ?? null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [source, setSource] = useState<'claude' | 'unavailable' | null>(null);
-  const [model, setModel] = useState<string | undefined>(undefined);
-  const [promptVersion, setPromptVersion] = useState<string | undefined>(undefined);
+  const [source, setSource] = useState<'claude' | 'unavailable' | null>(saved?.source ?? null);
+  const [model, setModel] = useState<string | undefined>(saved?.model);
+  const [promptVersion, setPromptVersion] = useState<string | undefined>(saved?.promptVersion);
 
   const abortRef = useRef<AbortController | null>(null);
+
+  // Mirror the live state into localStorage so the next visit can resume.
+  // Writing to storage (not setState) keeps this a plain external-system sync.
+  useEffect(() => {
+    if (!jobId || loading) return;
+    // Nothing worth resuming until the user is past the equipment picker.
+    if (phase === 'equipment' && !unit) return;
+    saveAiSnapshot(jobId, {
+      phase,
+      unit,
+      equipment,
+      complaint,
+      answered,
+      current,
+      source,
+      model,
+      promptVersion,
+    });
+  }, [jobId, loading, phase, unit, equipment, complaint, answered, current, source, model, promptVersion]);
 
   const units = useMemo(() => unitOptions(), []);
   const complaints = useMemo(() => complaintOptions(unit), [unit]);
@@ -199,7 +281,12 @@ export function useAiDiagnostic(): AiDiagnostic {
     setCurrent(null);
     setError(null);
     setSource(null);
-  }, []);
+    if (jobId) clearAiSnapshot(jobId);
+  }, [jobId]);
+
+  const clearResume = useCallback(() => {
+    if (jobId) clearAiSnapshot(jobId);
+  }, [jobId]);
 
   const retry = useCallback(() => {
     if (!unit || !complaint) return;
@@ -232,5 +319,6 @@ export function useAiDiagnostic(): AiDiagnostic {
     back,
     restart,
     retry,
+    clearResume,
   };
 }

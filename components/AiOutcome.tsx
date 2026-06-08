@@ -19,6 +19,8 @@ interface AiOutcomeProps {
   jobId?: string;
   onBack: () => void;
   onRestart: () => void;
+  /** Called after a successful save so the in-progress resume state can clear. */
+  onSaved?: () => void;
 }
 
 function slug(s: string): string {
@@ -38,6 +40,7 @@ export function AiOutcome({
   jobId,
   onBack,
   onRestart,
+  onSaved,
 }: AiOutcomeProps) {
   const [saving, setSaving] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
@@ -78,6 +81,7 @@ export function AiOutcome({
         jobId,
       });
       setSavedId(result.id);
+      onSaved?.();
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : 'Save failed');
     } finally {
