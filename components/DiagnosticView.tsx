@@ -8,6 +8,7 @@ import { Breadcrumb } from './Breadcrumb';
 import { HistoryTrail } from './HistoryTrail';
 import { StepCard } from './StepCard';
 import { UnitSelect } from './UnitSelect';
+import { EquipmentInfo } from './EquipmentInfo';
 import { Outcome } from './Outcome';
 
 const MAX_DEPTH = 12;
@@ -18,7 +19,7 @@ const MAX_DEPTH = 12;
  */
 export function DiagnosticView({ path: rawPath, jobId }: { path: string[]; jobId?: string }) {
   const dx = useDiagnostic(rawPath);
-  const { current, history, unit, crumbs, isOutcome, navigate, back, restart } = dx;
+  const { current, history, unit, crumbs, isOutcome, needsEquipmentInfo, setEquipment, navigate, back, restart } = dx;
 
   const progress = isOutcome
     ? 100
@@ -32,6 +33,12 @@ export function DiagnosticView({ path: rawPath, jobId }: { path: string[]; jobId
       if (tag === 'INPUT' || tag === 'TEXTAREA') return;
 
       const k = e.key.toLowerCase();
+
+      // the equipment-info gate handles its own input — allow back/restart but
+      // don't let number keys fall through to the complaint node underneath it
+      if (needsEquipmentInfo && !['escape', 'backspace', 'arrowleft', 'r'].includes(k)) {
+        return;
+      }
 
       if (k === 'escape' || k === 'backspace' || k === 'arrowleft') {
         e.preventDefault();
@@ -63,7 +70,7 @@ export function DiagnosticView({ path: rawPath, jobId }: { path: string[]; jobId
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [current, navigate, back, restart]);
+  }, [current, navigate, back, restart, needsEquipmentInfo]);
 
   // keep the viewport at the top on each step change
   useEffect(() => {
@@ -84,21 +91,27 @@ export function DiagnosticView({ path: rawPath, jobId }: { path: string[]; jobId
         <HistoryTrail history={history} />
         <Breadcrumb crumbs={crumbs} />
 
-        {current.type === 'unit-select' && (
-          <UnitSelect node={current} onSelect={navigate} />
-        )}
-        {(current.type === 'yn' || current.type === 'choice') && (
-          <StepCard node={current} step={history.length + 1} onAnswer={navigate} />
-        )}
-        {current.type === 'outcome' && (
-          <Outcome
-            node={current}
-            diagnostic={dx}
-            unitName={unit?.name}
-            jobId={jobId}
-            onBack={back}
-            onRestart={restart}
-          />
+        {needsEquipmentInfo ? (
+          <EquipmentInfo unitName={unit?.name} step={history.length + 1} onSubmit={setEquipment} />
+        ) : (
+          <>
+            {current.type === 'unit-select' && (
+              <UnitSelect node={current} onSelect={navigate} />
+            )}
+            {(current.type === 'yn' || current.type === 'choice') && (
+              <StepCard node={current} step={history.length + 1} onAnswer={navigate} />
+            )}
+            {current.type === 'outcome' && (
+              <Outcome
+                node={current}
+                diagnostic={dx}
+                unitName={unit?.name}
+                jobId={jobId}
+                onBack={back}
+                onRestart={restart}
+              />
+            )}
+          </>
         )}
 
         <KeyboardHint type={current.type} />

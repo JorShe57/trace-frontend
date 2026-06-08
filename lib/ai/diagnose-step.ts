@@ -7,6 +7,7 @@ import {
   hasAnthropicApiKey,
   isAiDiagnosisEnabled,
 } from '@/lib/env';
+import { formatEquipmentContext } from '@/lib/equipment';
 import { DIAGNOSE_SYSTEM_PROMPT, buildTreeKnowledge } from './diagnose-prompt';
 import { diagnosticStepSchema } from './step-schemas';
 
@@ -22,6 +23,8 @@ const MAX_QUESTIONS = 8;
 function buildUserMessage(req: AiDiagnoseRequest): string {
   const lines: string[] = [];
   lines.push(`Equipment: ${req.unit.name} (id: ${req.unit.id})`);
+  const equipment = formatEquipmentContext(req.equipment);
+  if (equipment) lines.push(`Equipment details: ${equipment}`);
   lines.push(`Customer complaint: ${req.complaint}`);
   lines.push('');
 

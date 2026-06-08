@@ -1,4 +1,6 @@
-import type { HistoryEntry } from '@/lib/types';
+import type { EquipmentContext, HistoryEntry } from '@/lib/types';
+
+export type { EquipmentContext };
 
 export interface EnrichUnit {
   id: string;
@@ -19,6 +21,7 @@ export interface EnrichDiagnosisRequest {
   history: HistoryEntry[];
   unit: EnrichUnit | null;
   outcome: EnrichOutcomePayload;
+  equipment?: EquipmentContext;
   technicianNotes?: string;
 }
 
@@ -53,6 +56,7 @@ export interface AiDiagnoseRequest {
   unit: EnrichUnit;
   complaint: string;
   history: AiQAEntry[];
+  equipment?: EquipmentContext;
   technicianNotes?: string;
 }
 

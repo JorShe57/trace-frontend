@@ -8,9 +8,9 @@ import type {
   AiQAEntry,
   AiQuestionStep,
 } from '@/lib/api/types';
-import type { ChoiceNode, UnitOption } from '@/lib/types';
+import type { ChoiceNode, EquipmentContext, UnitOption } from '@/lib/types';
 
-export type AiPhase = 'equipment' | 'complaint' | 'diagnosing';
+export type AiPhase = 'equipment' | 'equipment-info' | 'complaint' | 'diagnosing';
 
 export interface ComplaintOption {
   label: string;
@@ -26,6 +26,7 @@ export interface AiDiagnostic {
   phase: AiPhase;
   units: UnitOption[];
   unit: UnitOption | null;
+  equipment: EquipmentContext;
   complaints: ComplaintOption[];
   complaint: string | null;
   /** Answered questions in order (for the history trail). */
@@ -40,6 +41,7 @@ export interface AiDiagnostic {
   model?: string;
   promptVersion?: string;
   selectUnit: (unit: UnitOption) => void;
+  setEquipment: (equipment: EquipmentContext) => void;
   selectComplaint: (complaint: string) => void;
   answer: (value: string) => void;
   back: () => void;
@@ -69,6 +71,7 @@ function complaintOptions(unit: UnitOption | null): ComplaintOption[] {
 export function useAiDiagnostic(): AiDiagnostic {
   const [phase, setPhase] = useState<AiPhase>('equipment');
   const [unit, setUnit] = useState<UnitOption | null>(null);
+  const [equipment, setEquipmentState] = useState<EquipmentContext>({});
   const [complaint, setComplaint] = useState<string | null>(null);
   const [answered, setAnswered] = useState<AnsweredStep[]>([]);
   const [current, setCurrent] = useState<AiDiagnosticStep | null>(null);
@@ -84,7 +87,12 @@ export function useAiDiagnostic(): AiDiagnostic {
   const complaints = useMemo(() => complaintOptions(unit), [unit]);
 
   const fetchStep = useCallback(
-    async (u: UnitOption, complaintText: string, history: AiQAEntry[]) => {
+    async (
+      u: UnitOption,
+      complaintText: string,
+      history: AiQAEntry[],
+      equipmentCtx: EquipmentContext,
+    ) => {
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
@@ -96,6 +104,7 @@ export function useAiDiagnostic(): AiDiagnostic {
           unit: { id: u.id, name: u.name },
           complaint: complaintText,
           history,
+          equipment: equipmentCtx,
         });
         if (controller.signal.aborted) return;
         setCurrent(res.step);
@@ -114,9 +123,15 @@ export function useAiDiagnostic(): AiDiagnostic {
 
   const selectUnit = useCallback((u: UnitOption) => {
     setUnit(u);
+    setEquipmentState({});
     setComplaint(null);
     setAnswered([]);
     setCurrent(null);
+    setPhase('equipment-info');
+  }, []);
+
+  const setEquipment = useCallback((ctx: EquipmentContext) => {
+    setEquipmentState(ctx);
     setPhase('complaint');
   }, []);
 
@@ -127,9 +142,9 @@ export function useAiDiagnostic(): AiDiagnostic {
       setAnswered([]);
       setCurrent(null);
       setPhase('diagnosing');
-      void fetchStep(unit, c, []);
+      void fetchStep(unit, c, [], equipment);
     },
-    [unit, fetchStep],
+    [unit, equipment, fetchStep],
   );
 
   const answer = useCallback(
@@ -142,9 +157,9 @@ export function useAiDiagnostic(): AiDiagnostic {
       }));
       setAnswered(nextAnswered);
       setCurrent(null);
-      void fetchStep(unit, complaint, history);
+      void fetchStep(unit, complaint, history, equipment);
     },
-    [unit, complaint, current, answered, fetchStep],
+    [unit, complaint, current, answered, equipment, fetchStep],
   );
 
   const back = useCallback(() => {
@@ -165,6 +180,10 @@ export function useAiDiagnostic(): AiDiagnostic {
       return;
     }
     if (phase === 'complaint') {
+      setPhase('equipment-info');
+      return;
+    }
+    if (phase === 'equipment-info') {
       setPhase('equipment');
       setUnit(null);
     }
@@ -174,6 +193,7 @@ export function useAiDiagnostic(): AiDiagnostic {
     abortRef.current?.abort();
     setPhase('equipment');
     setUnit(null);
+    setEquipmentState({});
     setComplaint(null);
     setAnswered([]);
     setCurrent(null);
@@ -187,13 +207,14 @@ export function useAiDiagnostic(): AiDiagnostic {
       question: a.step.question,
       answer: a.answer,
     }));
-    void fetchStep(unit, complaint, history);
-  }, [unit, complaint, answered, fetchStep]);
+    void fetchStep(unit, complaint, history, equipment);
+  }, [unit, complaint, answered, equipment, fetchStep]);
 
   return {
     phase,
     units,
     unit,
+    equipment,
     complaints,
     complaint,
     answered,
@@ -205,6 +226,7 @@ export function useAiDiagnostic(): AiDiagnostic {
     model,
     promptVersion,
     selectUnit,
+    setEquipment,
     selectComplaint,
     answer,
     back,

@@ -5,11 +5,13 @@ import Link from 'next/link';
 import { useAiDiagnostic } from '@/lib/useAiDiagnostic';
 import { TREE, ROOT_ID } from '@/lib/engine';
 import type { ChoiceNode, HistoryEntry, UnitSelectNode } from '@/lib/types';
+import { formatEquipmentContext } from '@/lib/equipment';
 import { TopBar } from './TopBar';
 import { ProgressBar } from './ProgressBar';
 import { HistoryTrail } from './HistoryTrail';
 import { StepCard } from './StepCard';
 import { UnitSelect } from './UnitSelect';
+import { EquipmentInfo } from './EquipmentInfo';
 import { AiOutcome } from './AiOutcome';
 
 const MAX_DEPTH = 8;
@@ -25,6 +27,7 @@ export function AiDiagnosticView({ jobId }: { jobId?: string }) {
   const {
     phase,
     unit,
+    equipment,
     complaints,
     complaint,
     answered,
@@ -36,6 +39,7 @@ export function AiDiagnosticView({ jobId }: { jobId?: string }) {
     model,
     promptVersion,
     selectUnit,
+    setEquipment,
     selectComplaint,
     answer,
     back,
@@ -72,6 +76,16 @@ export function AiDiagnosticView({ jobId }: { jobId?: string }) {
       nodeId: 'complaint',
       question: 'Customer complaint',
       answer: complaint,
+      style: '',
+      phase: 'Intake',
+    });
+  }
+  const equipmentLine = formatEquipmentContext(equipment);
+  if (equipmentLine) {
+    history.unshift({
+      nodeId: 'equipment-info',
+      question: 'Equipment',
+      answer: equipmentLine,
       style: '',
       phase: 'Intake',
     });
@@ -135,6 +149,10 @@ export function AiDiagnosticView({ jobId }: { jobId?: string }) {
           />
         )}
 
+        {phase === 'equipment-info' && (
+          <EquipmentInfo unitName={unit?.name} step={1} onSubmit={setEquipment} />
+        )}
+
         {phase === 'complaint' && (
           <StepCard node={complaintNode} step={1} onAnswer={selectComplaint} />
         )}
@@ -157,6 +175,7 @@ export function AiDiagnosticView({ jobId }: { jobId?: string }) {
                 unitId={unit?.id}
                 unitName={unit?.name}
                 complaint={complaint ?? undefined}
+                equipment={equipment}
                 source={source}
                 model={model}
                 promptVersion={promptVersion}

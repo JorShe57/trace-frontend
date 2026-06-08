@@ -82,6 +82,19 @@ export type TreeNode = UnitSelectNode | YesNoNode | ChoiceNode | OutcomeNode;
 
 export type TreeMap = Record<string, TreeNode>;
 
+/**
+ * Optional equipment identity captured at intake. None of it routes the tree —
+ * it's session metadata that sharpens the AI's reasoning (a 2-week-old unit and
+ * a 15-year-old unit have very different likely causes) and is saved with the
+ * report.
+ */
+export interface EquipmentContext {
+  manufacturer?: string;
+  model?: string;
+  /** Human-readable age bracket, e.g. "<1 yr", "10–15 yr", "Unknown". */
+  ageBracket?: string;
+}
+
 /** A single resolved hop in the diagnostic path, used for the history trail. */
 export interface HistoryEntry {
   nodeId: string;
