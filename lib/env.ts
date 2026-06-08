@@ -10,6 +10,21 @@ export function isAiEnrichmentEnabled(): boolean {
   return process.env.ENABLE_AI_ENRICHMENT !== 'false';
 }
 
+/**
+ * Whether the AI is allowed to drive the diagnostic (ask questions / conclude).
+ * Falls back to the enrichment switch so a single env var can disable all AI,
+ * but can be toggled independently via ENABLE_AI_DIAGNOSIS.
+ */
+export function isAiDiagnosisEnabled(): boolean {
+  if (process.env.ENABLE_AI_DIAGNOSIS === 'false') return false;
+  if (process.env.ENABLE_AI_DIAGNOSIS === 'true') return true;
+  return isAiEnrichmentEnabled();
+}
+
+export function hasAnthropicApiKey(): boolean {
+  return Boolean(process.env.ANTHROPIC_API_KEY);
+}
+
 export function getAnthropicApiKey(): string {
   return required('ANTHROPIC_API_KEY');
 }
