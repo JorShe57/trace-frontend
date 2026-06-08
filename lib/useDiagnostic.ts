@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import {
   ROOT_ID,
   breadcrumb,
@@ -170,13 +170,19 @@ function readResumeFromStorage(): ResumeInfo | null {
   return cachedResume;
 }
 
-/** Resume banner data from the last persisted diagnostic path. */
+/** No-op subscription: resume is read once from storage on the client and does
+ *  not change reactively, matching the previous mount-only behaviour. */
+function subscribeResume(): () => void {
+  return () => {};
+}
+
+/** Resume banner data from the last persisted diagnostic path. Read via
+ *  useSyncExternalStore so the server snapshot is null (storage is unavailable
+ *  during SSR) and the client reads localStorage without a setState-in-effect. */
 export function useResume(): ResumeInfo | null {
-  const [resume, setResume] = useState<ResumeInfo | null>(null);
-
-  useEffect(() => {
-    setResume(readResumeFromStorage());
-  }, []);
-
-  return resume;
+  return useSyncExternalStore(
+    subscribeResume,
+    readResumeFromStorage,
+    () => null,
+  );
 }
