@@ -35,22 +35,24 @@ export default async function ReportsPage() {
           {sessions.map((s) => {
             const unit = selectedUnit(s.path);
             return (
-              <Link
+              <div
                 key={s.id}
-                href={`/reports/${s.id}`}
                 className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-bg3"
               >
-                <div className="min-w-0 flex-1">
+                <Link href={`/reports/${s.id}`} className="min-w-0 flex-1">
                   <div className="truncate text-[13px] text-text">{title(s)}</div>
                   <div className="mt-0.5 font-mono text-[9px] text-text3">
                     {[unit ? unit.name : null, new Date(s.created_at).toLocaleString()]
                       .filter(Boolean)
                       .join(' · ')}
                   </div>
-                </div>
+                </Link>
                 {s.enrichment?.confidence && <Badge tone="open">{s.enrichment.confidence}</Badge>}
                 {s.enrichment && <Badge tone="open">AI</Badge>}
-              </Link>
+                <ButtonLink href={`/reports/${s.id}/chat`} variant="ghost" className="px-2 py-1">
+                  Ask AI
+                </ButtonLink>
+              </div>
             );
           })}
         </Card>

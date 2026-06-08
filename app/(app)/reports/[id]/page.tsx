@@ -48,8 +48,8 @@ export default async function ReportDetailPage({
         </div>
         <div className="flex items-center gap-2">
           {e?.confidence && <Badge tone="open">{e.confidence} confidence</Badge>}
-          <ButtonLink href={`/diagnostic/${session.path.join('/')}`} variant="ghost">
-            Re-open path
+          <ButtonLink href={`/reports/${session.id}/chat`}>
+            Continue with AI →
           </ButtonLink>
         </div>
       </div>
@@ -80,7 +80,12 @@ export default async function ReportDetailPage({
 
           {steps && steps.length > 0 && (
             <Card className="px-4 py-3">
-              <SectionLabel>Next steps</SectionLabel>
+              <div className="mb-2 flex items-center justify-between">
+                <SectionLabel>Next steps</SectionLabel>
+                <ButtonLink href={`/reports/${session.id}/chat`} variant="ghost" className="px-2 py-1">
+                  Talk through these →
+                </ButtonLink>
+              </div>
               <ol className="flex flex-col gap-1.5">
                 {steps.map((s, i) => (
                   <li

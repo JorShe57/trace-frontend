@@ -31,7 +31,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-[100] flex h-[52px] items-center gap-4 border-b border-border bg-bg2 px-5">
-        <Link href="/" className="flex items-center gap-2" title="Back to home">
+        <Link href="/dashboard" className="flex items-center gap-2" title="Dashboard">
           <LogoMark />
           <span className="font-head text-[15px] font-bold tracking-[0.18em] text-text">
             T<span className="text-accent">.</span>R<span className="text-accent">.</span>A

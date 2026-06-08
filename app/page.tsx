@@ -1,8 +1,10 @@
+import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/supabase/server';
 import { HomeLanding } from '@/components/HomeLanding';
 
-/** Landing screen: brand intro, auth or diagnostic CTAs, and resume-last-session. */
+/** Landing screen: brand intro, auth CTAs. Signed-in users go straight to the dashboard. */
 export default async function Home() {
   const user = await getCurrentUser();
-  return <HomeLanding isSignedIn={!!user} />;
+  if (user) redirect('/dashboard');
+  return <HomeLanding />;
 }

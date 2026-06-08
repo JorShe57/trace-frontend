@@ -91,16 +91,16 @@ export default async function JobDetailPage({
             ) : (
               <ul className="divide-y divide-border">
                 {sessions.map((s) => (
-                  <li key={s.id}>
-                    <Link
-                      href={`/reports/${s.id}`}
-                      className="flex items-center justify-between gap-3 py-2.5 hover:text-accent"
-                    >
+                  <li key={s.id} className="flex items-center justify-between gap-3 py-2.5">
+                    <Link href={`/reports/${s.id}`} className="min-w-0 flex-1 hover:text-accent">
                       <span className="truncate text-[13px] text-text">{sessionTitle(s)}</span>
-                      <span className="font-mono text-[9px] text-text3">
+                      <span className="block font-mono text-[9px] text-text3">
                         {new Date(s.created_at).toLocaleDateString()}
                       </span>
                     </Link>
+                    <ButtonLink href={`/reports/${s.id}/chat`} variant="ghost" className="px-2 py-1">
+                      Ask AI
+                    </ButtonLink>
                   </li>
                 ))}
               </ul>
