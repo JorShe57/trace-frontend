@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useSyncExternalStore } from 'react';
-import Link from 'next/link';
 import { useAiDiagnostic } from '@/lib/useAiDiagnostic';
 import { TREE, ROOT_ID } from '@/lib/engine';
 import type { ChoiceNode, HistoryEntry, UnitSelectNode } from '@/lib/types';
@@ -152,7 +151,6 @@ function AiDiagnosticSession({ jobId }: { jobId?: string }) {
       <ProgressBar value={progress} />
 
       <main className="mx-auto max-w-shell px-5 pb-16 pt-7">
-        <ModeBanner />
         <HistoryTrail history={history} />
 
         {phase === 'equipment' && (
@@ -208,23 +206,6 @@ function AiDiagnosticSession({ jobId }: { jobId?: string }) {
           AI-driven diagnosis · the model adapts each question to your answers
         </p>
       </main>
-    </div>
-  );
-}
-
-function ModeBanner() {
-  return (
-    <div className="mb-5 flex items-center gap-2 rounded-[5px] border border-accent/20 bg-[var(--accent-faint)] px-3 py-2">
-      <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-accent">AI mode</span>
-      <span className="flex-1 text-[11px] leading-snug text-text2">
-        Questions are generated live from your answers, not a fixed script.
-      </span>
-      <Link
-        href="/diagnostic/start"
-        className="flex-shrink-0 font-mono text-[9px] uppercase tracking-[0.08em] text-text3 hover:text-accent"
-      >
-        Classic tree →
-      </Link>
     </div>
   );
 }

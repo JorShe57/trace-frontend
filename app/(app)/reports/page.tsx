@@ -21,14 +21,14 @@ export default async function ReportsPage() {
       <PageHeading
         title="Reports"
         subtitle="Every diagnostic you've saved."
-        action={<ButtonLink href="/diagnostic/start">Start a diagnostic →</ButtonLink>}
+        action={<ButtonLink href="/diagnostic/ai">Start a diagnostic →</ButtonLink>}
       />
 
       {sessions.length === 0 ? (
         <EmptyState
           title="No saved reports yet"
           hint="Walk a complaint to an outcome, then tap “Save report” to keep it here for the customer or the office."
-          action={<ButtonLink href="/diagnostic/start">Start a diagnostic →</ButtonLink>}
+          action={<ButtonLink href="/diagnostic/ai">Start a diagnostic →</ButtonLink>}
         />
       ) : (
         <Card className="divide-y divide-border">

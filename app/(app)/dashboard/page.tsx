@@ -166,9 +166,6 @@ export default async function DashboardPage() {
         <SectionLabel>Quick start</SectionLabel>
         <div className="flex flex-wrap gap-2">
           <ButtonLink href="/diagnostic/ai">AI diagnostic</ButtonLink>
-          <ButtonLink href="/diagnostic/start" variant="ghost">
-            Classic tree
-          </ButtonLink>
           <ButtonLink href="/jobs/new" variant="ghost">
             + New job
           </ButtonLink>
