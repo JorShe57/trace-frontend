@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ROOT_ID,
   breadcrumb,
@@ -129,8 +129,7 @@ function buildResume(path: string[]): ResumeInfo {
   };
 }
 
-/** Cached snapshot — useSyncExternalStore requires stable references between reads. */
-function readResumeSnapshot(): ResumeInfo | null {
+function readResumeFromStorage(): ResumeInfo | null {
   const last = readLastPath();
   const key = last ? last.join('/') : '';
   if (key === cachedPathKey) return cachedResume;
@@ -139,15 +138,13 @@ function readResumeSnapshot(): ResumeInfo | null {
   return cachedResume;
 }
 
-function subscribeLastPath(callback: () => void) {
-  const onStorage = (event: StorageEvent) => {
-    if (event.key === LAST_PATH_KEY) callback();
-  };
-  window.addEventListener('storage', onStorage);
-  return () => window.removeEventListener('storage', onStorage);
-}
-
 /** Resume banner data from the last persisted diagnostic path. */
 export function useResume(): ResumeInfo | null {
-  return useSyncExternalStore(subscribeLastPath, readResumeSnapshot, () => null);
+  const [resume, setResume] = useState<ResumeInfo | null>(null);
+
+  useEffect(() => {
+    setResume(readResumeFromStorage());
+  }, []);
+
+  return resume;
 }

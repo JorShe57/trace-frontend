@@ -64,7 +64,7 @@ export function useEnrichedOutcome(
       });
 
     return () => controller.abort();
-  }, [diagnostic.path, diagnostic.currentId, diagnostic.history, diagnostic.unit, node, tick]);
+  }, [diagnostic.path.join('/'), diagnostic.currentId, diagnostic.unit?.id, node.title, tick]);
 
   return { data, loading, error, retry };
 }
