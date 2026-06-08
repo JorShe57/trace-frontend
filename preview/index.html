@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T.R.A.C.E. — Diagnostic Tree (preview)</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+[data-theme="dark"]{
+  --bg:#080808;--bg2:#0d0d0d;--bg3:#121212;--bg4:#1a1a1a;
+  --border:#1c1c1c;--border2:#2a2a2a;
+  --text:#e0e0e0;--text2:#888;--text3:#5a5a5a;
+  --accent:#39d353;--accent2:#22a83e;
+  --accent-dim:rgba(57,211,83,.1);--accent-faint:rgba(57,211,83,.05);
+  --red:#e05252;--red-bg:rgba(224,82,82,.08);
+  --yellow:#d4b800;--yellow-bg:rgba(212,184,0,.08);
+  color-scheme:dark;
+}
+[data-theme="light"]{
+  --bg:#eceee9;--bg2:#ffffff;--bg3:#f7f8f5;--bg4:#eef0eb;
+  --border:#e0e3dd;--border2:#cfd3cb;
+  --text:#181a16;--text2:#565a53;--text3:#888d84;
+  --accent:#1f9d4d;--accent2:#15793a;
+  --accent-dim:rgba(31,157,77,.12);--accent-faint:rgba(31,157,77,.07);
+  --red:#c23a39;--red-bg:rgba(194,58,57,.08);
+  --yellow:#927000;--yellow-bg:rgba(146,112,0,.1);
+  color-scheme:light;
+}
+:root{
+  --hf:'Barlow Condensed',sans-serif;--mf:'JetBrains Mono',monospace;--bf:'Barlow',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--bf);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+.topbar{height:52px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;position:sticky;top:0;z-index:100}
+.tb-mark{width:30px;height:30px;border:1.5px solid var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.tb-mark::after{content:'';position:absolute;inset:4px;border:1px solid var(--accent);opacity:.3;border-radius:2px}
+.tb-mark svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2.5;position:relative;z-index:1}
+.tb-name{font-family:var(--hf);font-size:19px;font-weight:700;color:var(--text);letter-spacing:.2em}
+.tb-name span{color:var(--accent)}
+.tb-sub{font-size:9px;color:var(--text3);font-family:var(--mf);letter-spacing:.08em}
+.tb-sep{width:1px;height:20px;background:var(--border2);margin:0 4px}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tb-btn{font-family:var(--hf);font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 12px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;text-transform:uppercase}
+.tb-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tb-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);border-radius:3px;background:transparent;color:var(--text3);cursor:pointer;transition:all .15s}
+.tb-icon:hover{border-color:var(--accent);color:var(--accent)}
+.tb-icon svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+
+.progress-bar{height:2px;background:var(--border);position:relative;flex-shrink:0}
+.progress-fill{height:100%;background:var(--accent);transition:width .4s ease;width:0%}
+
+.main{max-width:680px;margin:0 auto;padding:28px 20px 60px}
+
+.breadcrumb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:22px;align-items:center}
+.bc-item{font-size:9px;font-family:var(--mf);color:var(--text3);letter-spacing:.06em}
+.bc-sep{font-size:9px;color:var(--text3);margin:0 1px}
+.bc-item.current{color:var(--accent)}
+
+.step-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.step-card.entry{border-color:var(--border2)}
+.step-phase{padding:7px 14px;background:rgba(127,127,127,.04);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.phase-pip{width:3px;height:14px;border-radius:2px;background:var(--accent);flex-shrink:0}
+.phase-pip.yellow{background:var(--yellow)}.phase-pip.red{background:var(--red)}.phase-pip.grey{background:var(--text3)}
+.phase-label{font-size:8px;font-family:var(--mf);color:var(--text3);letter-spacing:.12em;text-transform:uppercase}
+.phase-step{font-size:8px;font-family:var(--mf);color:var(--text3);margin-left:auto;letter-spacing:.06em}
+.step-body{padding:18px 16px 14px}
+.step-question{font-family:var(--hf);font-size:20px;font-weight:600;color:var(--text);letter-spacing:.03em;line-height:1.3;margin-bottom:6px}
+.step-context{font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:16px}
+.step-tip{background:var(--accent-faint);border-left:2px solid var(--accent);border-radius:0 4px 4px 0;padding:8px 12px;margin-bottom:16px;font-size:11px;color:var(--text2);line-height:1.5}
+.step-tip strong{color:var(--accent);font-weight:500}
+
+.answers{display:flex;flex-direction:column;gap:7px}
+.ans-btn{padding:12px 16px;border-radius:5px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:13px;font-family:var(--bf);cursor:pointer;transition:all .15s;text-align:left;display:flex;align-items:center;gap:10px;line-height:1.4}
+.ans-btn:hover{border-color:var(--accent);background:var(--accent-dim)}
+.ans-btn.yes{border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
+.ans-btn.yes:hover{border-color:var(--accent);background:var(--accent-dim)}
+.ans-btn.no{border-color:color-mix(in srgb,var(--red) 20%,transparent)}
+.ans-btn.no:hover{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.ans-btn.warn{border-color:color-mix(in srgb,var(--yellow) 20%,transparent)}
+.ans-btn.warn:hover{border-color:var(--yellow);background:var(--yellow-bg);color:var(--yellow)}
+.ans-key{width:18px;height:18px;border-radius:3px;border:1px solid var(--border2);font-family:var(--mf);font-size:9px;color:var(--text3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ans-label{flex:1}
+.ans-sub{font-size:10px;color:var(--text3);display:block;margin-top:2px}
+
+.yn-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.yn-btn{padding:14px;border-radius:5px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;transition:all .15s;text-align:center;font-family:var(--hf);font-size:18px;font-weight:700;letter-spacing:.06em}
+.yn-btn.y{color:var(--accent)}.yn-btn.y:hover{border-color:var(--accent);background:var(--accent-dim)}
+.yn-btn.n{color:var(--red)}.yn-btn.n:hover{border-color:var(--red);background:var(--red-bg)}
+.yn-btn.u{color:var(--text3);font-size:13px;font-family:var(--bf);font-weight:400;grid-column:span 2}
+.yn-btn.u:hover{border-color:var(--border);color:var(--text2)}
+
+.history{margin-bottom:20px;display:flex;flex-direction:column;gap:6px}
+.hist-item{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:9px 12px;display:flex;align-items:flex-start;gap:10px;opacity:.7}
+.hist-q{font-size:11px;color:var(--text2);flex:1;line-height:1.4}
+.hist-a{font-size:11px;font-family:var(--mf);color:var(--accent);white-space:nowrap;flex-shrink:0}
+.hist-a.red{color:var(--red)}.hist-a.yellow{color:var(--yellow)}
+
+.outcome-card{background:var(--bg2);border:1px solid var(--accent);border-radius:8px;overflow:hidden}
+.outcome-card.danger{border-color:var(--red)}
+.outcome-header{background:var(--accent-dim);border-bottom:1px solid color-mix(in srgb,var(--accent) 20%,transparent);padding:12px 16px;display:flex;align-items:center;gap:8px}
+.outcome-header>div{flex:1;min-width:0}
+.outcome-title{text-wrap:pretty}
+.outcome-card.danger .outcome-header{background:var(--red-bg);border-bottom-color:color-mix(in srgb,var(--red) 20%,transparent)}
+.outcome-icon{font-size:18px}
+.outcome-title{font-family:var(--hf);font-size:18px;font-weight:700;color:var(--accent);letter-spacing:.06em}
+.outcome-card.danger .outcome-title{color:var(--red)}
+.outcome-sub{font-size:9px;color:var(--text2);font-family:var(--mf);margin-top:1px}
+.outcome-body{padding:16px}
+.outcome-section{margin-bottom:14px}
+.outcome-label{font-size:8px;font-family:var(--mf);color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.outcome-val{font-size:13px;color:var(--text);line-height:1.6}
+.outcome-val.accent{color:var(--accent);font-family:var(--mf);font-size:12px}
+.outcome-divider{height:1px;background:var(--border);margin:12px 0}
+.outcome-next{display:flex;flex-direction:column;gap:6px}
+.next-step{background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:9px 12px;font-size:12px;color:var(--text);line-height:1.5;display:flex;align-items:flex-start;gap:8px}
+.next-num{width:18px;height:18px;border-radius:50%;background:var(--accent-dim);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);color:var(--accent);font-size:9px;font-family:var(--mf);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.safety-flag{background:var(--red-bg);border:1px solid color-mix(in srgb,var(--red) 30%,transparent);border-radius:4px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--red);line-height:1.5;display:flex;align-items:flex-start;gap:8px}
+.outcome-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--bg3)}
+.out-btn{font-size:10px;font-family:var(--mf);letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:3px;cursor:pointer;transition:all .15s}
+.out-btn.primary{background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent)}
+.out-btn.primary:hover{background:color-mix(in srgb,var(--accent) 18%,transparent)}
+.out-btn.secondary{background:transparent;border:1px solid var(--border2);color:var(--text3)}
+.out-btn.secondary:hover{color:var(--text2);border-color:var(--border)}
+
+.unit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.unit-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:13px 10px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left}
+.unit-btn:hover{border-color:var(--border2);background:var(--bg4)}
+.ub-top{display:flex;align-items:center;gap:8px}
+.ub-icon{width:26px;height:26px;border-radius:3px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ub-name{font-family:var(--hf);font-size:13px;font-weight:600;color:var(--text);letter-spacing:.03em}
+.ub-sub{font-size:9px;color:var(--text3);padding-left:34px;line-height:1.3}
+
+.landing{max-width:680px;margin:0 auto;padding:48px 20px;min-height:calc(100vh - 54px);display:flex;flex-direction:column;justify-content:center}
+.intro-card{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:32px 20px;text-align:center}
+.intro-logo{font-family:var(--hf);font-size:28px;font-weight:700;color:var(--text);letter-spacing:.2em;margin-bottom:4px}
+.intro-logo span{color:var(--accent)}
+.intro-tagline{font-size:11px;color:var(--text3);font-family:var(--mf);letter-spacing:.08em;margin-bottom:18px}
+.intro-desc{font-size:13px;color:var(--text2);line-height:1.6;max-width:480px;margin:0 auto 28px}
+.intro-start{display:inline-block;border:1px solid var(--accent);background:var(--accent-dim);color:var(--accent);font-family:var(--hf);font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:10px 24px;border-radius:4px;cursor:pointer;transition:all .15s}
+.intro-start:hover{background:color-mix(in srgb,var(--accent) 18%,transparent)}
+.resume{margin-top:12px;display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .15s}
+.resume:hover{border-color:var(--accent)}
+.resume-tag{font-family:var(--mf);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+.resume-label{flex:1;font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.resume-arrow{font-family:var(--mf);font-size:12px;color:var(--accent)}
+
+.kbd-hint{margin-top:20px;text-align:center;font-family:var(--mf);font-size:9px;letter-spacing:.06em;color:var(--text3)}
+@media (max-width:560px){.unit-grid{grid-template-columns:repeat(2,1fr)}.tb-sep,.tb-unit{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-mark"><svg viewBox="0 0 16 16"><polyline points="1,12 4,6 7,10 10,4 13,8 15,5"/></svg></div>
+  <div>
+    <div class="tb-name">T<span>.</span>R<span>.</span>A<span>.</span>C<span>.</span>E<span>.</span></div>
+    <div class="tb-sub">Diagnostic Decision Tree</div>
+  </div>
+  <div class="tb-sep"></div>
+  <div class="tb-unit" id="tb-unit" style="font-size:11px;color:var(--text2);font-family:var(--mf)">—</div>
+  <div class="tb-right">
+    <button class="tb-btn" onclick="goBack()" id="tb-back" style="display:none">← Back</button>
+    <button class="tb-btn" onclick="restart()">↺ Restart</button>
+    <button class="tb-icon" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
+  </div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div id="root"></div>
+
+<script src="trace.data.js"></script>
+<script>
+const TREE = window.TREE;
+const ROOT = 'start';
+const LS_PATH = 'trace.lastPath';
+const LS_THEME = 'trace.theme';
+
+/* ---------- theme ---------- */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  try{ localStorage.setItem(LS_THEME, t); }catch(e){}
+  const btn = document.getElementById('theme-toggle');
+  btn.innerHTML = t==='dark'
+    ? '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+    : '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>';
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(cur==='dark'?'light':'dark');
+}
+(function initTheme(){
+  let t='dark';
+  try{ const s=localStorage.getItem(LS_THEME); if(s==='dark'||s==='light') t=s;
+       else if(matchMedia('(prefers-color-scheme: light)').matches) t='light'; }catch(e){}
+  applyTheme(t);
+})();
+
+/* ---------- engine ---------- */
+function edges(node){
+  if(!node) return [];
+  if(node.type==='unit-select') return node.units.map(u=>u.next);
+  if(node.type==='yn') return [node.yes,node.no,node.unsure].filter(Boolean);
+  if(node.type==='choice') return node.answers.map(a=>a.next);
+  return [];
+}
+function sanitizePath(path){
+  if(!path.length || path[0]!==ROOT) return [ROOT];
+  const out=[ROOT];
+  for(let i=1;i<path.length;i++){
+    const prev=TREE[out[out.length-1]];
+    if(!prev || !edges(prev).includes(path[i]) || !TREE[path[i]]) break;
+    out.push(path[i]);
+    if(TREE[path[i]].type==='outcome') break;
+  }
+  return out;
+}
+function resolveAnswer(node,childId){
+  if(node.type==='unit-select'){const u=node.units.find(x=>x.next===childId);return{answer:u?u.name:'—',style:''};}
+  if(node.type==='yn'){
+    if(childId===node.yes) return {answer:'Yes',style:'yes'};
+    if(childId===node.no) return {answer:'No',style:'no'};
+    return {answer:'Not sure',style:''};
+  }
+  if(node.type==='choice'){const a=node.answers.find(x=>x.next===childId);return{answer:a?a.label:'—',style:a?a.style||'':''};}
+  return {answer:'',style:''};
+}
+function buildHistory(path){
+  const h=[];
+  for(let i=0;i<path.length-1;i++){
+    const node=TREE[path[i]]; if(!node) continue;
+    const {answer,style}=resolveAnswer(node,path[i+1]);
+    h.push({question:node.question||node.title||'',answer,style,phase:node.phase||''});
+  }
+  return h;
+}
+function selectedUnit(path){
+  const start=TREE[ROOT];
+  if(!start||start.type!=='unit-select'||path.length<2) return null;
+  return start.units.find(u=>u.next===path[1])||null;
+}
+function breadcrumb(path){
+  const ph=path.map(id=>TREE[id]&&TREE[id].phase).filter(Boolean);
+  return [...new Set(ph)];
+}
+
+/* dev integrity check: warn on any edge pointing at an undefined node */
+(function validateTree(){
+  const problems=[];
+  Object.keys(TREE).forEach(id=>{ edges(TREE[id]).forEach(to=>{ if(!TREE[to]) problems.push(id+' → '+to); }); });
+  if(problems.length) console.warn('[T.R.A.C.E.] dangling tree edge(s):',problems);
+})();
+
+/* ---------- routing ---------- */
+function getPath(){
+  const h=location.hash.replace(/^#\/?/,'');
+  if(!h) return null; // landing
+  return sanitizePath(h.split('/').filter(Boolean));
+}
+function setPath(path){ location.hash = '#/'+path.join('/'); }
+function navigate(nextId){ const p=getPath()||[ROOT]; setPath(sanitizePath([...p,nextId])); }
+function goBack(){ const p=getPath(); if(!p) return; if(p.length<=1){ location.hash=''; return;} setPath(p.slice(0,-1)); }
+function restart(){ setPath([ROOT]); }
+
+/* ---------- render ---------- */
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+function render(){
+  const path=getPath();
+  const root=document.getElementById('root');
+  const backBtn=document.getElementById('tb-back');
+
+  if(!path){ renderLanding(root); backBtn.style.display='none';
+    document.getElementById('tb-unit').textContent='—';
+    document.getElementById('progress').style.width='0%'; return; }
+
+  try{ localStorage.setItem(LS_PATH, JSON.stringify(path)); }catch(e){}
+
+  const node=TREE[path[path.length-1]];
+  const history=buildHistory(path);
+  const unit=selectedUnit(path);
+  document.getElementById('tb-unit').textContent = unit ? unit.icon+' '+unit.name : '—';
+  backBtn.style.display = history.length ? 'inline-block' : 'none';
+
+  const isOutcome = node.type==='outcome';
+  document.getElementById('progress').style.width = (isOutcome?100:Math.min(history.length/12*100,95))+'%';
+
+  let html='<div class="main">';
+
+  // history
+  if(history.length){
+    html+='<div class="history">';
+    history.forEach(h=>{
+      const c=h.style==='warn'?'yellow':h.style==='no'?'red':'';
+      html+=`<div class="hist-item"><span class="hist-q">${esc(h.question)}</span><span class="hist-a ${c}">${esc(h.answer)}</span></div>`;
+    });
+    html+='</div>';
+  }
+
+  // breadcrumb
+  const crumbs=breadcrumb(path);
+  if(crumbs.length){
+    html+='<div class="breadcrumb">';
+    crumbs.forEach((p,i)=>{
+      html+=`<span class="bc-item${i===crumbs.length-1?' current':''}">${esc(p)}</span>`;
+      if(i<crumbs.length-1) html+='<span class="bc-sep">›</span>';
+    });
+    html+='</div>';
+  }
+
+  if(node.type==='unit-select') html+=renderUnit(node);
+  else if(node.type==='outcome') html+=renderOutcome(node,unit);
+  else html+=renderStep(node,history.length+1);
+
+  // keyboard hint
+  let hint = node.type==='yn' ? 'Keys: Y / N · U not sure · ← back · R restart'
+    : (node.type==='choice'||node.type==='unit-select') ? 'Keys: 1–9 select · ← back · R restart'
+    : '← back · R restart';
+  html+=`<div class="kbd-hint">${hint}</div>`;
+  html+='</div>';
+
+  root.innerHTML=html;
+  window.scrollTo(0,0);
+}
+
+function renderStep(node,step){
+  let h=`<div class="step-card"><div class="step-phase"><div class="phase-pip ${node.phasePip||'grey'}"></div><span class="phase-label">${esc(node.phase||'')}</span><span class="phase-step">Step ${step}</span></div><div class="step-body"><div class="step-question">${esc(node.question)}</div>`;
+  if(node.context) h+=`<div class="step-context">${esc(node.context)}</div>`;
+  if(node.tip) h+=`<div class="step-tip">${node.tip}</div>`;
+  if(node.type==='yn'){
+    h+='<div class="yn-pair">';
+    h+=`<button class="yn-btn y" onclick="navigate('${node.yes}')">Yes</button>`;
+    h+=`<button class="yn-btn n" onclick="navigate('${node.no}')">No</button>`;
+    if(node.unsure) h+=`<button class="yn-btn u" onclick="navigate('${node.unsure}')">Not sure / Need to check</button>`;
+    h+='</div>';
+  }else{
+    h+='<div class="answers">';
+    node.answers.forEach((a,i)=>{
+      h+=`<button class="ans-btn ${a.style||''}" onclick="navigate('${a.next}')"><span class="ans-key">${i+1}</span><span class="ans-label">${esc(a.label)}${a.sub?`<span class="ans-sub">${esc(a.sub)}</span>`:''}</span></button>`;
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+  return h;
+}
+
+function renderUnit(node){
+  let h=`<div class="step-card entry"><div class="step-phase"><div class="phase-pip grey"></div><span class="phase-label">${esc(node.phase||'')}</span></div><div class="step-body"><div class="step-question">${esc(node.question)}</div>`;
+  if(node.context) h+=`<div class="step-context">${esc(node.context)}</div>`;
+  h+='<div class="unit-grid">';
+  node.units.forEach(u=>{
+    h+=`<button class="unit-btn" onclick="navigate('${u.next}')"><div class="ub-top"><div class="ub-icon">${u.icon}</div><span class="ub-name">${esc(u.name)}</span></div><div class="ub-sub">${esc(u.sub)}</div></button>`;
+  });
+  h+='</div></div></div>';
+  return h;
+}
+
+function renderOutcome(node,unit){
+  const danger=!!node.safety;
+  let h=`<div class="outcome-card ${danger?'danger':''}">`;
+  h+=`<div class="outcome-header"><span class="outcome-icon">${node.icon||'◈'}</span><div><div class="outcome-title">${esc(node.title)}</div><div class="outcome-sub">${[node.phase,unit&&unit.name].filter(Boolean).map(esc).join(' · ')}</div></div></div>`;
+  h+='<div class="outcome-body">';
+  if(node.safety) h+=`<div class="safety-flag"><span style="flex-shrink:0">⚠</span><span>${esc(node.safety)}</span></div>`;
+  h+=`<div class="outcome-section"><div class="outcome-label">Finding</div><div class="outcome-val">${esc(node.finding||'')}</div></div>`;
+  if(node.steps&&node.steps.length){
+    h+='<div class="outcome-divider"></div><div class="outcome-section"><div class="outcome-label">Next steps</div><div class="outcome-next">';
+    node.steps.forEach((s,i)=>{ h+=`<div class="next-step"><span class="next-num">${i+1}</span><span>${esc(s)}</span></div>`; });
+    h+='</div></div>';
+  }
+  if(node.tools&&node.tools.length){
+    h+=`<div class="outcome-divider"></div><div class="outcome-section"><div class="outcome-label">Tools needed</div><div class="outcome-val accent">${node.tools.map(esc).join(' · ')}</div></div>`;
+  }
+  h+='</div>';
+  h+=`<div class="outcome-footer"><button class="out-btn secondary" onclick="goBack()">← Back</button><button class="out-btn primary" onclick="restart()">↺ Restart</button></div>`;
+  h+='</div>';
+  return h;
+}
+
+function renderLanding(root){
+  let resumeHtml='';
+  try{
+    const raw=localStorage.getItem(LS_PATH);
+    if(raw){
+      const last=JSON.parse(raw);
+      if(Array.isArray(last)&&last.length>1){
+        const node=TREE[last[last.length-1]];
+        const where=node?(node.type==='outcome'?node.title:node.question):'In progress';
+        const steps=buildHistory(last).length;
+        resumeHtml=`<div class="resume" onclick="location.hash='#/${last.join('/')}'"><span class="resume-tag">Resume</span><span class="resume-label">${steps} step${steps===1?'':'s'} in · ${esc(where)}</span><span class="resume-arrow">→</span></div>`;
+      }
+    }
+  }catch(e){}
+  root.innerHTML=`<div class="landing">
+    <div class="intro-card">
+      <div class="intro-logo">T<span>.</span>R<span>.</span>A<span>.</span>C<span>.</span>E<span>.</span></div>
+      <div class="intro-tagline">Technician Reference &amp; Component Evaluation</div>
+      <div class="intro-desc">A guided field diagnostic. Start from the customer's complaint and walk the tree — controls, equipment, visual, then performance — to a likely cause, with the next steps, safety flags and tools you need.</div>
+      <button class="intro-start" onclick="location.hash='#/start'">Start a diagnostic →</button>
+    </div>
+    ${resumeHtml}
+    <div class="kbd-hint">Tip: every step is deep-linkable — copy the URL to share a path.</div>
+  </div>`;
+}
+
+/* ---------- keyboard ---------- */
+window.addEventListener('keydown',e=>{
+  const tag=(e.target&&e.target.tagName)||'';
+  if(tag==='INPUT'||tag==='TEXTAREA') return;
+  const path=getPath();
+  const k=e.key.toLowerCase();
+  if(k==='escape'||k==='backspace'||k==='arrowleft'){ e.preventDefault(); goBack(); return; }
+  if(k==='r'){ restart(); return; }
+  if(!path) return;
+  const node=TREE[path[path.length-1]];
+  if(!node) return;
+  if(node.type==='yn'){
+    if(k==='y') navigate(node.yes);
+    else if(k==='n') navigate(node.no);
+    else if((k==='u'||k==='s')&&node.unsure) navigate(node.unsure);
+  }else if(node.type==='choice'){
+    const i=parseInt(e.key,10)-1; if(i>=0&&i<node.answers.length) navigate(node.answers[i].next);
+  }else if(node.type==='unit-select'){
+    const i=parseInt(e.key,10)-1; if(i>=0&&i<node.units.length) navigate(node.units[i].next);
+  }
+});
+
+window.addEventListener('hashchange',render);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ───────────────────────── Design tokens ─────────────────────────
+   Dark is the default field aesthetic. Light is a high-contrast
+   alternative for bright environments / printing. Swapping
+   [data-theme] re-points every token the UI references. */
+:root,
+[data-theme='dark'] {
+  --bg: #080808;
+  --bg2: #0d0d0d;
+  --bg3: #121212;
+  --bg4: #1a1a1a;
+  --border: #1c1c1c;
+  --border2: #2a2a2a;
+  --text: #e0e0e0;
+  --text2: #888888;
+  --text3: #5a5a5a;
+  --accent: #39d353;
+  --accent2: #22a83e;
+  --accent-dim: rgba(57, 211, 83, 0.1);
+  --accent-faint: rgba(57, 211, 83, 0.05);
+  --red: #e05252;
+  --red-bg: rgba(224, 82, 82, 0.08);
+  --yellow: #d4b800;
+  --yellow-bg: rgba(212, 184, 0, 0.08);
+
+  --hf: 'Barlow Condensed', sans-serif;
+  --mf: 'JetBrains Mono', monospace;
+  --bf: 'Barlow', sans-serif;
+
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --bg: #eceee9;
+  --bg2: #ffffff;
+  --bg3: #f7f8f5;
+  --bg4: #eef0eb;
+  --border: #e0e3dd;
+  --border2: #cfd3cb;
+  --text: #181a16;
+  --text2: #565a53;
+  --text3: #888d84;
+  --accent: #1f9d4d;
+  --accent2: #15793a;
+  --accent-dim: rgba(31, 157, 77, 0.12);
+  --accent-faint: rgba(31, 157, 77, 0.07);
+  --red: #c23a39;
+  --red-bg: rgba(194, 58, 57, 0.08);
+  --yellow: #927000;
+  --yellow-bg: rgba(146, 112, 0, 0.1);
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--bf);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible keyboard focus for the custom button widgets. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Rich text injected from the tree data (e.g. <strong> inside a tip). */
+.rich strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
