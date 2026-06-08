@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { useAiDiagnostic } from '@/lib/useAiDiagnostic';
 import { TREE, ROOT_ID } from '@/lib/engine';
@@ -22,8 +22,23 @@ const MAX_DEPTH = 8;
  * held in React (AI steps aren't addressable URL nodes), but the look matches
  * the guided tree by reusing the same step components.
  */
+/**
+ * Gate the session behind a client-only mount check. This keeps the resume
+ * snapshot read (localStorage, inside useAiDiagnostic) off the server render,
+ * so there's no hydration mismatch and no setState-in-effect.
+ */
 export function AiDiagnosticView({ jobId }: { jobId?: string }) {
-  const dx = useAiDiagnostic();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  if (!mounted) return <div className="min-h-screen" aria-hidden />;
+  return <AiDiagnosticSession jobId={jobId} />;
+}
+
+function AiDiagnosticSession({ jobId }: { jobId?: string }) {
+  const dx = useAiDiagnostic(jobId);
   const {
     phase,
     unit,
@@ -45,6 +60,7 @@ export function AiDiagnosticView({ jobId }: { jobId?: string }) {
     back,
     restart,
     retry,
+    clearResume,
   } = dx;
 
   const startNode = TREE[ROOT_ID] as UnitSelectNode;
@@ -182,6 +198,7 @@ export function AiDiagnosticView({ jobId }: { jobId?: string }) {
                 jobId={jobId}
                 onBack={back}
                 onRestart={restart}
+                onSaved={clearResume}
               />
             )}
           </>
