@@ -2,7 +2,14 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
 /** Routes that require a signed-in technician. */
-const PROTECTED_PREFIXES = ['/dashboard', '/reports', '/customers', '/jobs', '/account'];
+const PROTECTED_PREFIXES = [
+  '/dashboard',
+  '/reports',
+  '/customers',
+  '/jobs',
+  '/account',
+  '/diagnostic',
+];
 
 /**
  * Refreshes the Supabase auth session on every request (so server reads stay

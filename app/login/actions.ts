@@ -40,12 +40,19 @@ export async function signUp(formData: FormData) {
   });
 
   if (error) {
-    redirect(`/signup?error=${encodeURIComponent(error.message)}`);
+    redirect(
+      `/signup?error=${encodeURIComponent(error.message)}&redirect=${encodeURIComponent(redirectTo)}`,
+    );
   }
 
   // When email confirmation is enabled there is no active session yet.
   if (!data.session) {
-    redirect('/login?notice=' + encodeURIComponent('Check your email to confirm your account, then sign in.'));
+    redirect(
+      '/login?notice=' +
+        encodeURIComponent('Check your email to confirm your account, then sign in.') +
+        '&redirect=' +
+        encodeURIComponent(redirectTo),
+    );
   }
   redirect(redirectTo);
 }
