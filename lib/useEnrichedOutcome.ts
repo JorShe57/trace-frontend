@@ -49,6 +49,7 @@ export function useEnrichedOutcome(
         steps: node.steps,
         tools: node.tools,
       },
+      equipment: diagnostic.equipment,
     })
       .then((result) => {
         if (controller.signal.aborted) return;

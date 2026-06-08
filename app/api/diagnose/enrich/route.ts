@@ -28,6 +28,13 @@ const requestSchema = z.object({
     steps: z.array(z.string()).optional(),
     tools: z.array(z.string()).optional(),
   }),
+  equipment: z
+    .object({
+      manufacturer: z.string().optional(),
+      model: z.string().optional(),
+      ageBracket: z.string().optional(),
+    })
+    .optional(),
   technicianNotes: z.string().optional(),
 });
 

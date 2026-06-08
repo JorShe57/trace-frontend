@@ -11,7 +11,7 @@ import {
   sanitizePath,
   selectedUnit,
 } from './engine';
-import type { TreeNode } from './types';
+import type { EquipmentContext, TreeNode } from './types';
 
 const LAST_PATH_KEY = 'trace.lastPath';
 
@@ -27,6 +27,15 @@ export interface Diagnostic {
   crumbs: string[];
   atStart: boolean;
   isOutcome: boolean;
+  /** Optional equipment identity captured at intake (metadata, not routing). */
+  equipment: EquipmentContext;
+  /**
+   * True when the unit is picked but the equipment-info step hasn't been
+   * answered/skipped yet — the view gates the complaint node behind it.
+   */
+  needsEquipmentInfo: boolean;
+  /** Record the equipment-info answer (or an empty object on skip). */
+  setEquipment: (ctx: EquipmentContext) => void;
   /** Advance to a child node id, pushing a new URL. */
   navigate: (nextId: string) => void;
   /** Pop the last step. */
@@ -52,6 +61,26 @@ export function useDiagnostic(rawPath: string[]): Diagnostic {
   const crumbs = useMemo(() => breadcrumb(path), [path]);
   const isOutcome = current.type === 'outcome';
   const atStart = path.length <= 1;
+
+  // Equipment identity captured at intake — session-local metadata that feeds
+  // enrichment and the saved report. It never routes the tree. Keyed by the
+  // unit's complaint node (path[1]) so each unit gets its own one-time prompt
+  // and a fresh unit selection re-asks, with no reset effect needed.
+  const unitKey = path[1] ?? '';
+  const [equipmentByUnit, setEquipmentByUnit] = useState<Record<string, EquipmentContext>>({});
+  const equipment = equipmentByUnit[unitKey] ?? {};
+  const equipmentDecided = unitKey in equipmentByUnit;
+
+  const setEquipment = useCallback(
+    (ctx: EquipmentContext) => {
+      setEquipmentByUnit((prev) => ({ ...prev, [unitKey]: ctx }));
+    },
+    [unitKey],
+  );
+
+  // Gate the complaint node (depth 1, just past the unit pick) behind the
+  // one-time equipment-info step until it's answered or skipped.
+  const needsEquipmentInfo = path.length === 2 && !equipmentDecided;
 
   // Persist the latest valid path for resume.
   useEffect(() => {
@@ -87,6 +116,9 @@ export function useDiagnostic(rawPath: string[]): Diagnostic {
     crumbs,
     atStart,
     isOutcome,
+    equipment,
+    needsEquipmentInfo,
+    setEquipment,
     navigate,
     back,
     restart,

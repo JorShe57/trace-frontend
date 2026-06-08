@@ -4,12 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { saveSession } from '@/lib/api/client';
 import type { AiOutcomeStep } from '@/lib/api/types';
+import { formatEquipmentContext } from '@/lib/equipment';
+import type { EquipmentContext } from '@/lib/types';
 
 interface AiOutcomeProps {
   step: AiOutcomeStep;
   unitId?: string;
   unitName?: string;
   complaint?: string;
+  equipment?: EquipmentContext;
   source: 'claude' | 'unavailable' | null;
   model?: string;
   promptVersion?: string;
@@ -28,6 +31,7 @@ export function AiOutcome({
   unitId,
   unitName,
   complaint,
+  equipment,
   source,
   model,
   promptVersion,
@@ -45,12 +49,19 @@ export function AiOutcome({
     setSaving(true);
     setSaveError(null);
     try {
+      const equipmentLine = formatEquipmentContext(equipment);
+      const notes = [
+        equipmentLine ? `Equipment: ${equipmentLine}` : '',
+        complaint ? `Complaint: ${complaint}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n');
       const result = await saveSession({
         path: [unitId ?? 'ai', slug(step.title)],
         unitId,
         outcomeId: slug(step.title),
         completedAt: new Date().toISOString(),
-        notes: complaint ? `Complaint: ${complaint}` : undefined,
+        notes: notes || undefined,
         enrichment: {
           summary: step.finding,
           finding: step.finding,

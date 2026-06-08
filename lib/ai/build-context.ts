@@ -1,4 +1,5 @@
 import type { EnrichDiagnosisRequest } from '@/lib/api/types';
+import { formatEquipmentContext } from '@/lib/equipment';
 
 /** Compact, structured context for the Claude prompt. */
 export function buildDiagnosisContext(req: EnrichDiagnosisRequest): string {
@@ -6,6 +7,10 @@ export function buildDiagnosisContext(req: EnrichDiagnosisRequest): string {
 
   if (req.unit) {
     lines.push(`Equipment: ${req.unit.name} (id: ${req.unit.id})`);
+  }
+  const equipment = formatEquipmentContext(req.equipment);
+  if (equipment) {
+    lines.push(`Equipment details: ${equipment} (tailor likely causes to brand/model/age)`);
   }
 
   lines.push('');

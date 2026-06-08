@@ -45,7 +45,7 @@ export const TREE: TreeMap = {
       {label:'Short cycling',           sub:'Starts then shuts off after a short time',   style:'',    next:'power_check'},
       {label:'Making a noise',          sub:'Banging, squealing, clicking, rattling',     style:'',    next:'power_check'},
       {label:'Tripping breaker',        sub:'Keeps losing power at the panel',            style:'', next:'power_check'},
-      {label:'Error / fault code',      sub:'Display or board showing a fault',           style:'',    next:'power_check'},
+      {label:'Error / fault code',      sub:'Display or board showing a fault',           style:'',    next:'code_intake'},
       {label:'Leaking water',           sub:'Water around the air handler or drain',      style:'',    next:'power_check'},
       {label:'Running constantly',      sub:'Never shuts off, high energy bill',          style:'',    next:'power_check'},
       {label:'Freezing up / iced over', sub:'Ice on lines or indoor coil',               style:'', next:'power_check'},
@@ -66,7 +66,7 @@ export const TREE: TreeMap = {
       {label:'Not defrosting',             sub:'Ice building up on outdoor unit in heat mode',style:'',next:'power_check'},
       {label:'Making a noise',             sub:'Banging, squealing, clicking, rattling',     style:'',    next:'power_check'},
       {label:'Tripping breaker',           sub:'Keeps losing power',                         style:'', next:'power_check'},
-      {label:'Error / fault code',         sub:'Display or board showing a fault',           style:'',    next:'power_check'},
+      {label:'Error / fault code',         sub:'Display or board showing a fault',           style:'',    next:'code_intake'},
       {label:'Leaking water',              sub:'Water around indoor unit or drain',          style:'',    next:'power_check'},
       {label:'Running constantly',         sub:'Never shuts off, high energy bill',          style:'',    next:'power_check'},
     ]
@@ -84,7 +84,7 @@ export const TREE: TreeMap = {
       {label:'Short cycling',        sub:'Starts then shuts off quickly',              style:'',    next:'power_check'},
       {label:'Making a noise',       sub:'Banging, squealing, clicking, rattling',     style:'',    next:'power_check'},
       {label:'Tripping breaker',     sub:'Keeps losing power',                         style:'', next:'power_check'},
-      {label:'Error / fault code',   sub:'Display or board showing a fault',           style:'',    next:'power_check'},
+      {label:'Error / fault code',   sub:'Display or board showing a fault',           style:'',    next:'code_intake'},
       {label:'Economizer issue',     sub:'Economizer stuck open or closed',            style:'',    next:'power_check'},
       {label:'Leaking water',        sub:'Condensate issue or drain backed up',        style:'',    next:'power_check'},
       {label:'Running constantly',   sub:'Never shuts off, high energy bill',          style:'',    next:'power_check'},
@@ -104,10 +104,11 @@ export const TREE: TreeMap = {
       {label:'Not enough heat',            sub:'Running but not keeping up',                  style:'',    next:'power_check'},
       {label:'Making a noise',             sub:'Banging, rumbling, squealing on startup',     style:'',    next:'power_check'},
       {label:'Tripping breaker',           sub:'Keeps losing power',                          style:'', next:'power_check'},
-      {label:'Error / fault code',         sub:'LED flashing a fault sequence',               style:'',    next:'power_check'},
+      {label:'Error / fault code',         sub:'Board showing a fault — you can read the code',style:'',   next:'code_intake'},
       {label:'Smell of gas or burning',    sub:'Odor present near the unit',                  style:'', next:'power_check'},
       {label:'Blower runs but no heat',    sub:'Fan comes on but burner doesn\'t light',      style:'',    next:'power_check'},
-      {label:'Overheating / limit trips',  sub:'High limit tripping, unit cycling on limit',  style:'', next:'power_check'},
+      {label:'Leaking water',              sub:'Water around a high-efficiency furnace, drain, or humidifier',style:'',next:'furnace_water_leak'},
+      {label:'Overheating / limit trips',  sub:'High limit tripping, unit cycling on limit',  style:'', next:'furnace_high_limit'},
     ]
   },
 
@@ -117,13 +118,13 @@ export const TREE: TreeMap = {
     context:'Boiler — hydronic heating system. What are they describing?',
     type:'choice',
     answers:[
-      {label:'No heat in the building',     sub:'Boiler not firing or zones not heating',    style:'',    next:'power_check'},
+      {label:'No heat in the building',     sub:'Boiler not firing or zones not heating',    style:'',    next:'boiler_firing'},
       {label:'One zone not heating',         sub:'Other zones work, one doesn\'t',            style:'',    next:'power_check'},
-      {label:'Boiler not firing',            sub:'Calls for heat but won\'t ignite',          style:'',    next:'power_check'},
+      {label:'Boiler not firing',            sub:'Calls for heat but won\'t ignite',          style:'',    next:'boiler_firing'},
       {label:'Low system pressure',          sub:'Pressure gauge reading low, losing water',  style:'', next:'power_check'},
       {label:'High pressure / relief valve', sub:'Pressure relief valve opening or dripping', style:'', next:'power_check'},
       {label:'Making a noise',               sub:'Banging, kettling, gurgling',               style:'',    next:'power_check'},
-      {label:'Error / lockout code',         sub:'Display showing a fault',                   style:'',    next:'power_check'},
+      {label:'Error / lockout code',         sub:'Display showing a fault — you can read the code',style:'', next:'code_intake'},
       {label:'Leaking water',                sub:'Water around boiler or at fittings',        style:'', next:'power_check'},
       {label:'Not enough heat',              sub:'Running but not keeping up',                 style:'',    next:'power_check'},
       {label:'Smell of gas',                 sub:'Gas odor near the boiler',                  style:'', next:'power_check'},
@@ -139,7 +140,7 @@ export const TREE: TreeMap = {
       {label:'Not cooling',           sub:'Running but not conditioning',               style:'',    next:'power_check'},
       {label:'Not heating',           sub:'In heat mode, not producing heat',           style:'',    next:'power_check'},
       {label:'Not running at all',    sub:'No response from indoor or outdoor unit',    style:'',    next:'power_check'},
-      {label:'Error code on display', sub:'E1, E2, F code or other fault on head unit', style:'', next:'power_check'},
+      {label:'Error code on display', sub:'E1, E2, F code or other fault on head unit', style:'', next:'code_intake'},
       {label:'Short cycling',         sub:'Starts then shuts off quickly',              style:'',    next:'power_check'},
       {label:'Making a noise',        sub:'Rattling, squealing, gurgling sounds',       style:'',    next:'power_check'},
       {label:'Leaking water',         sub:'Water dripping from indoor head unit',       style:'',    next:'power_check'},
@@ -161,7 +162,7 @@ export const TREE: TreeMap = {
       {label:'Defrost not working',          sub:'Ice building up, not clearing',             style:'',    next:'power_check'},
       {label:'Making a noise',               sub:'Unusual sounds from compressor or fans',   style:'',    next:'power_check'},
       {label:'Leaking water',                sub:'Water on floor, drain issue',              style:'',    next:'power_check'},
-      {label:'Display or alarm showing',     sub:'Controller fault or temperature alarm',    style:'', next:'power_check'},
+      {label:'Display or alarm showing',     sub:'Controller fault or temperature alarm',    style:'', next:'code_intake'},
       {label:'Running constantly',           sub:'Never cycles off, high energy use',        style:'',    next:'power_check'},
       {label:'Doors not sealing',            sub:'Gaskets worn, doors not closing properly', style:'',    next:'power_check'},
     ]
@@ -196,7 +197,7 @@ export const TREE: TreeMap = {
       {label:'Short cycling',           sub:'Starts then shuts off quickly',              style:'',    next:'power_check'},
       {label:'Making a noise',          sub:'Any unusual sound',                          style:'',    next:'power_check'},
       {label:'Tripping breaker',        sub:'Keeps losing power',                         style:'', next:'power_check'},
-      {label:'Error / fault code',      sub:'Any fault indication on the unit',           style:'',    next:'power_check'},
+      {label:'Error / fault code',      sub:'Any fault indication on the unit',           style:'',    next:'code_intake'},
       {label:'Leaking — water or refrigerant', sub:'Any fluid leak',                     style:'', next:'power_check'},
       {label:'Not performing',          sub:'Running but not meeting setpoint',           style:'',    next:'power_check'},
     ]
@@ -456,7 +457,7 @@ export const TREE: TreeMap = {
       {label:'Indoor unit responds, outdoor does not',sub:'Blower runs but condenser/compressor silent',style:'',next:'outdoor_not_responding'},
       {label:'Nothing responds at all',sub:'Completely silent on call',style:'warn',next:'no_response_on_call'},
       {label:'Partial — something starts then stops',sub:'Short cycling on call',style:'warn',next:'short_cycle_on_call'},
-      {label:'Error code or fault light',sub:'Board or equipment showing a fault',style:'warn',next:'fault_code'},
+      {label:'Error code or fault light',sub:'Board or equipment showing a fault',style:'warn',next:'code_intake'},
     ]
   },
 
@@ -505,21 +506,56 @@ export const TREE: TreeMap = {
     tools:['Multimeter','Jumper wire for safety switch testing (careful)']
   },
 
-  fault_code:{
+  code_intake:{
+    phase:'Phase 1 — Controls',phasePip:'yellow',
+    type:'choice',
+    question:'What fault is the code telling you?',
+    context:'Read the code against the legend on the panel sticker or the service manual — then tell me what it points to. We work the fault, not the blink count: the same number of flashes means different things on different brands, so the category matters, not how many times the LED blinks.',
+    tip:'<strong>Field note:</strong> Photograph the legend and the displayed code. Some boards store a fault history — scroll back for previous codes too. A code names the circuit at fault, not always the failed part.',
+    answers:[
+      {label:'Ignition / flame fault',          sub:'Failed ignition, flame not sensed, flame dropout',style:'warn',next:'furnace_lights_then_out'},
+      {label:'Pressure switch / venting fault',  sub:'PS open/closed wrong, draft/vent fault',         style:'warn',next:'furnace_pressure_switch'},
+      {label:'High limit / overheat',            sub:'Limit open, overtemp lockout',                   style:'warn',next:'furnace_high_limit'},
+      {label:'Flame rollout',                    sub:'Rollout switch tripped — manual reset',          style:'no',  next:'flame_rollout'},
+      {label:'Refrigerant pressure fault',       sub:'High or low pressure switch (A/C, HP, ref)',     style:'warn',next:'outdoor_no_signal'},
+      {label:'Lockout / soft lockout',           sub:'Board locked out after failed tries',            style:'warn',next:'control_board_issue'},
+      {label:'Other / not sure what it means',   sub:'Look the code up in the manual',                 style:'',    next:'code_lookup'},
+    ]
+  },
+
+  code_lookup:{
     phase:'Phase 1 — Controls',phasePip:'yellow',
     type:'outcome',
-    title:'Equipment fault code — look it up',
+    title:'Look the code up against the manual',
     icon:'⚠',
-    finding:'The system is showing a fault code or the control board LED is flashing a sequence. This is the equipment telling you exactly where to look.',
+    finding:'The board is reporting a fault you are not sure of. The code is the equipment telling you where to look — match it to the legend for this exact make and model rather than guessing, because the same indication means different things across manufacturers.',
     safety:null,
     steps:[
-      'Read the fault code — count LED flashes or read the display',
-      'Check the fault code legend — usually on a sticker inside the panel cover',
-      'Document the code and look it up in the service manual for that equipment',
-      'Common codes: pressure switch faults (check refrigerant charge and coil), limit trips (check airflow), ignition faults (check igniter, flame sensor, gas pressure)',
-      'Note: some boards store fault history — check for previous codes too'
+      'Read the displayed code or fault description — do not rely on counting LED blinks, the legend tells you what it means',
+      'Find the fault legend — usually on a sticker inside the panel cover, or in the service manual for this make/model',
+      'Match the code to its meaning, then work that system (ignition, venting, limit, refrigerant, etc.)',
+      'Check the board for stored fault history — a previous code often explains an intermittent complaint',
+      'Remember the code names the circuit, not always the failed part — verify the root cause before replacing anything'
     ],
-    tools:['Phone camera (photograph the fault code legend)','Service manual']
+    tools:['Phone camera (photograph the fault legend and the code)','Service manual for this make/model']
+  },
+
+  flame_rollout:{
+    phase:'Phase 2 — Combustion',phasePip:'red',
+    type:'outcome',
+    title:'Flame rollout — find why before resetting',
+    icon:'🔥',
+    finding:'A tripped flame rollout switch means flame or hot combustion gas rolled out of the burner box instead of being drawn through the heat exchanger. This is a combustion-safety trip — never just reset it and leave. Common causes: blocked or cracked heat exchanger, blocked flue/vent, failed or weak inducer, or a primary-air/burner problem.',
+    safety:'Flame rollout is a CO and fire hazard. Do not bypass or repeatedly reset the rollout switch. If the heat exchanger is cracked or blocked, shut the furnace down and tag it out until repaired. Test for CO before and after.',
+    steps:[
+      'Confirm the rollout switch actually tripped (open on a manual-reset switch) — do not jumper it',
+      'Inspect the heat exchanger for cracks, rust-out, or blockage (use a camera/mirror)',
+      'Check the flue/vent and inducer for blockage or weak draft — verify the inducer pulls proper draft',
+      'Inspect burners for blockage, misalignment, or debris causing poor combustion',
+      'Verify gas pressure (manifold) is in spec — overfiring can roll flame out',
+      'Only reset the rollout after the root cause is found and corrected; test combustion and CO'
+    ],
+    tools:['Combustion analyzer / CO meter','Inspection camera or mirror','Manometer','Multimeter']
   },
 
   outdoor_not_responding:{
@@ -987,6 +1023,308 @@ export const TREE: TreeMap = {
       'Recommend a maintenance agreement if not already on one'
     ],
     tools:[]
+  },
+
+  // ── FURNACE — water / condensate ──
+
+  furnace_water_leak:{
+    phase:'Phase 2 — Combustion',phasePip:'grey',
+    question:'Is this a high-efficiency (condensing) furnace?',
+    context:'Look at the venting and drains. A condensing furnace (90%+ AFUE) vents in PVC/CPVC and has a condensate trap and drain line — it makes water on purpose. An 80% furnace vents in metal pipe and should not be producing condensate.',
+    tip:'<strong>Field note:</strong> A high-efficiency furnace can make a gallon or more of condensate an hour, and that water is mildly acidic. Most furnace "leaks" are a blocked or failed condensate path, not the heat exchanger.',
+    type:'yn',
+    yes:'furnace_condensate',
+    no:'furnace_leak_nonhe',
+    unsure:'furnace_condensate'
+  },
+
+  furnace_condensate:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Condensate problem on a high-efficiency furnace',
+    icon:'💧',
+    finding:'Condensing furnaces normally produce significant acidic condensate from the secondary heat exchanger. Water around the unit almost always means the condensate is not draining — a clogged trap, drain hose, or collector box; a slime/scale buildup; a failed condensate pump; or a frozen/improperly pitched drain line. A backed-up condensate path can also fill a pressure-switch hose and trip the furnace on a pressure fault.',
+    safety:'Furnace condensate is mildly acidic — protect skin and eyes, and don\'t let it sit on metal. If draining is blocked enough to affect combustion or venting, treat CO as a risk and verify the flue is clear.',
+    steps:[
+      'Pull and inspect the condensate trap — clean out slime/scale and verify it holds water (a dry trap can let flue gas leak)',
+      'Check the drain hoses and collector box for clogs, sediment, or sagging/kinked runs; clear and re-pitch for continuous downhill drainage',
+      'If a condensate pump is used, confirm it runs, the float isn\'t stuck, the check valve works, and the discharge line is clear',
+      'Check the inducer/collector-box drain port and the pressure-switch hose — water in the PS hose will cause nuisance pressure faults',
+      'Verify the drain line isn\'t frozen (common on lines run through unconditioned space) and that any neutralizer cartridge isn\'t plugged',
+      'If the secondary heat exchanger is suspected (water with combustion issues), scope it — a cracked/corroded secondary is the less-common but serious cause'
+    ],
+    tools:['Wet/dry vac','Nitrogen or condensate hose brush','Multimeter (pump/float)','Inspection camera']
+  },
+
+  furnace_leak_nonhe:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Water leak on a non-condensing furnace — look above and beside it',
+    icon:'💧',
+    finding:'An 80% (non-condensing, metal-vented) furnace should not make condensate. Water around it usually comes from something else: a whole-home humidifier mounted on the furnace, the A/C evaporator coil / condensate pan sitting above the furnace, or flue condensation from an oversized or badly short-cycling unit.',
+    safety:null,
+    steps:[
+      'Check the humidifier first — a leaking bypass/fan humidifier, stuck solenoid, or failed drain/grommet drips right onto the furnace',
+      'Check the A/C evaporator coil and condensate pan above the furnace — a plugged primary drain or rusted pan will overflow onto the heat exchanger',
+      'Trace the water to its highest point — water tracks down, so the source is usually above where you see it',
+      'Look for flue condensation: an oversized or short-cycling 80% furnace, or a flue run through cold space, can sweat and drip back',
+      'Check the A-coil drain pan, P-trap, and secondary/float switch while you are in there'
+    ],
+    tools:['Flashlight','Towels / moisture meter','Multimeter']
+  },
+
+  // ── FURNACE — high limit / overheat ──
+
+  furnace_high_limit:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    question:'The furnace is tripping the high limit — what do you find on the air side?',
+    context:'A high-limit trip is almost always not enough air moving across the heat exchanger, so heat builds up. Before condemning the limit switch, find what is choking airflow — and don\'t forget a humidifier, which can dump hot supply air back into the return if it\'s installed wrong or has failed.',
+    tip:'<strong>Field note:</strong> A bypass humidifier piped from supply to return with the damper stuck open (or installed backward) recirculates hot air straight back at the furnace and trips the limit — easy to miss if you only look at filters and coils.',
+    type:'choice',
+    answers:[
+      {label:'There\'s a whole-home humidifier on the system',sub:'Bypass/fan humidifier between supply and return',style:'warn',next:'furnace_humidifier_limit'},
+      {label:'Dirty filter, closed registers, or undersized return',sub:'Classic airflow starvation',style:'warn',next:'furnace_airflow_limit'},
+      {label:'Dirty blower wheel or blower running slow',sub:'Loaded-up wheel, wrong tap/speed, weak cap',style:'warn',next:'furnace_airflow_limit'},
+      {label:'Airflow checks out — still tripping on limit',sub:'Good static, clean coil/filter, blower strong',style:'',next:'furnace_limit_switch'},
+    ]
+  },
+
+  furnace_humidifier_limit:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Humidifier recirculating hot air — tripping the high limit',
+    icon:'♨',
+    finding:'A bypass humidifier ties the supply and return together through a bypass duct and damper. If it\'s installed backward, the bypass damper is stuck/left open, or the humidifier has failed open, hot supply air short-circuits straight back into the return. The furnace can\'t reject its heat into the house, temperature climbs, and it trips the high limit.',
+    safety:null,
+    steps:[
+      'Find the bypass duct and damper — confirm it\'s piped supply→return and the damper closes when there\'s no humidity call',
+      'In heating with no humidity call, feel the bypass: hot air rushing through it back to the return confirms the short-circuit',
+      'Check the humidifier damper position (winter/summer) and that the damper actually moves and seals',
+      'Verify the solenoid/valve and any motorized damper are de-energizing and closing when not calling',
+      'Correct the install or repair the failed damper/humidifier, then confirm the limit no longer trips and check the temperature rise against the rating plate'
+    ],
+    tools:['Thermometer / temp clamp','Multimeter','Manometer (temperature rise / static)']
+  },
+
+  furnace_airflow_limit:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Airflow restriction — overheating on high limit',
+    icon:'🌡',
+    finding:'Not enough air across the heat exchanger lets heat build until the high limit opens. The usual suspects are a plugged filter, a dirty blower wheel, closed/blocked registers, undersized or restricted return, or the blower running too slow (wrong speed tap, weak run capacitor, or a failing motor).',
+    safety:null,
+    steps:[
+      'Check and replace the filter; confirm it isn\'t over-restrictive (too high a MERV for the system)',
+      'Pull and inspect the blower wheel — a dirt-loaded wheel moves far less air than it looks',
+      'Measure total external static pressure and the temperature rise; compare rise to the rating plate range',
+      'Verify blower speed tap / ECM programming is correct for heating; check the run capacitor and motor amps',
+      'Open closed registers, check for crushed/disconnected ducts, and confirm the return is adequate',
+      'Re-run the furnace and confirm the limit holds with rise back in range before condemning the limit switch'
+    ],
+    tools:['Manometer (static / temp rise)','Clamp meter','Capacitor tester','Replacement filter']
+  },
+
+  furnace_limit_switch:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Airflow good but still tripping — suspect the limit or overfiring',
+    icon:'⚠',
+    finding:'If airflow, static, and temperature rise all check out and it still trips on limit, look at the high-limit switch itself (drifted, weak, or wrong part) or an overfiring/combustion issue raising heat-exchanger temps. A limit that opens at the correct temp is doing its job — confirm the rise is actually fine before replacing it.',
+    safety:'A limit switch is a safety. Never jumper it to keep the furnace running. If you can\'t confirm normal temperature rise, leave the furnace off.',
+    steps:[
+      'Verify temperature rise is within the rating-plate range with the limit in place',
+      'Check manifold gas pressure — overfiring raises heat-exchanger temperature and trips the limit',
+      'Ohm/continuity test the limit hot and cold; compare its open/close temps to spec',
+      'Confirm it\'s the correct limit part number and is mounted/seated properly',
+      'Inspect the heat exchanger — a blocked or partially plugged exchanger restricts heat transfer to the air',
+      'Replace the limit only after confirming rise and gas pressure are correct'
+    ],
+    tools:['Manometer','Thermometer / temp clamp','Multimeter']
+  },
+
+  // ── FURNACE — pressure switch / venting ──
+
+  furnace_pressure_switch:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    question:'Pressure-switch fault — what do you actually measure?',
+    context:'Don\'t condemn the switch yet. A pressure-switch code means the proving circuit isn\'t seeing the draft it expects — and that can be the hose, the inducer, a blocked vent, or the board, not the switch. Put a manometer on the inducer/switch port and check the draft against the spec stamped on the switch (e.g. -0.50" w.c.).',
+    tip:'<strong>Field note:</strong> Check the obvious physical stuff outside too — a dead bird or nest in the flue, a snow drift over the termination, a dog toy or bag against the intake. A blocked vent looks exactly like a bad switch on the board.',
+    type:'choice',
+    answers:[
+      {label:'Hose is clogged, cracked, or has water in it',sub:'PS port/hose blocked or full of condensate',style:'warn',next:'furnace_ps_hose'},
+      {label:'Flue or intake is blocked',sub:'Nest/bird, snow, debris, blocked termination',style:'warn',next:'furnace_vent_blockage'},
+      {label:'Inducer weak or draft below spec',sub:'Low manometer reading, slow/noisy inducer',style:'warn',next:'furnace_inducer_weak'},
+      {label:'Switch tests good, hoses clear, draft is in spec, vent clear',sub:'Everything proves out — switch isn\'t the problem',style:'',next:'furnace_control_board'},
+    ]
+  },
+
+  furnace_ps_hose:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Pressure-switch hose / port blocked or water-logged',
+    icon:'⚠',
+    finding:'The pressure switch is only as good as the signal it sees. A cracked or clogged hose, a port plugged with soot or scale, or condensate sitting in the hose will keep the switch from making, even though the inducer is drawing proper draft. This is a common false "bad pressure switch."',
+    safety:null,
+    steps:[
+      'Remove the hose and inspect for cracks, kinks, soot, or water; blow it clear and re-seat it',
+      'Check the inducer/collector-box pressure tap and the switch port for blockage and clean them',
+      'On condensing furnaces, confirm condensate isn\'t backing into the hose (see the condensate path)',
+      'With a manometer on the switch port, confirm draft meets the value stamped on the switch',
+      'If draft is in spec and the hose/port are clear but the switch still won\'t make, test the switch for continuity and replace if faulty'
+    ],
+    tools:['Manometer','Multimeter','Replacement hose']
+  },
+
+  furnace_vent_blockage:{
+    phase:'Phase 2 — Combustion',phasePip:'red',
+    type:'outcome',
+    title:'Blocked flue / intake causing the pressure fault',
+    icon:'🪺',
+    finding:'A restricted vent or intake drops the draft the pressure switch needs, so the board reports a pressure-switch fault even though the switch is fine. Causes range from a bird/nest or insect screen plugged with debris, to a snow drift or ice over the termination, to something physically blocking it (bag, dog toy, leaves), to a sagging/disconnected vent pipe.',
+    safety:'A blocked flue is a CO hazard. Do not run the furnace with a restricted vent. Verify the termination and full vent run are clear and test for CO before returning to service.',
+    steps:[
+      'Go outside and inspect the vent and intake terminations — clear any nest, debris, snow, ice, or object',
+      'Check screens/couplings on PVC terminations and the rain cap on metal flues',
+      'Inspect the full vent run for sags, disconnects, blockage, or (metal) blocked/rusted sections',
+      'With the vent clear, put a manometer on the inducer and confirm draft is back in spec',
+      'Confirm the pressure switch now makes on a call and the furnace completes ignition; test CO'
+    ],
+    tools:['Manometer','Combustion analyzer / CO meter','Flashlight / mirror']
+  },
+
+  furnace_inducer_weak:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Inducer not drawing proper draft',
+    icon:'🌀',
+    finding:'The pressure switch is reporting low draft because the inducer genuinely isn\'t producing it. A worn inducer motor/bearing, a debris- or condensate-loaded inducer wheel, a cracked/loose housing, or low voltage to the inducer all drop the draft below the switch setpoint.',
+    safety:null,
+    steps:[
+      'With the inducer running, measure draft at the inducer/switch port and compare to the switch spec',
+      'Listen/feel for a slow, noisy, or wobbling inducer; check the wheel for buildup or damage',
+      'Confirm line voltage to the inducer on a call and check motor amp draw against the rating',
+      'Inspect the inducer housing and gaskets for cracks or leaks that bleed off draft',
+      'Check the collector box/inducer drain for blockage (water in the housing kills draft)',
+      'Replace the inducer assembly if draft stays below spec with a clear vent and good voltage'
+    ],
+    tools:['Manometer','Clamp meter','Multimeter']
+  },
+
+  furnace_control_board:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Pressure switch proves out — suspect the control board',
+    icon:'🔧',
+    finding:'When the pressure switch tests good, the hoses and ports are clear, the inducer pulls proper draft, the vent and intake are clear, and condensate is draining — the pressure-switch fault is no longer a pressure problem. At that point the control board (or its wiring/connector) failing to read the closed switch is the likely cause. The code named the circuit, not the failed part.',
+    safety:null,
+    steps:[
+      'Confirm the switch closes on a call: jump the inducer and read continuity across the switch with the manometer in spec',
+      'With the switch proven closed, check for 24V into and out of the switch at the board terminals',
+      'Inspect the board\'s molex/pin connectors for corrosion, backed-out pins, or loose terminals; reseat them',
+      'Check the board\'s pressure-switch input per the service manual (some boards latch or mis-read a flaky connection)',
+      'Verify board ground and incoming voltage are solid',
+      'If the switch is proven closed and in spec but the board won\'t acknowledge it, replace the control board'
+    ],
+    tools:['Manometer','Multimeter','Jumper wire (for testing only)','Service manual']
+  },
+
+  // ── BOILER — firing / ignition ──
+
+  boiler_firing:{
+    phase:'Phase 2 — Combustion',phasePip:'grey',
+    question:'How does this boiler light?',
+    context:'Before chasing any one part, identify the ignition system — it sets the whole diagnostic path. A standing-pilot boiler proves flame with a thermocouple/thermopile; an electronic system uses a hot-surface or spark igniter and an ignition module.',
+    tip:'<strong>Field note:</strong> Confirm there is actually a call for heat (thermostat/aquastat, zone valve/circulator end switch) and that gas is on before condemning any ignition component.',
+    type:'choice',
+    answers:[
+      {label:'Standing pilot — pilot light + thermocouple/thermopile',sub:'Constant pilot flame proves the main valve',style:'',next:'boiler_standing_pilot'},
+      {label:'Electronic — hot surface or spark ignition',sub:'Igniter + ignition module, no standing pilot',style:'',next:'boiler_electronic_ignition'},
+      {label:'Not sure — calls for heat but nothing happens',sub:'No ignition attempt at all',style:'warn',next:'boiler_no_fire_basics'},
+    ]
+  },
+
+  boiler_standing_pilot:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    question:'What is the pilot doing?',
+    context:'On a standing-pilot boiler the thermocouple (millivolt) or thermopile (powerpile) must be heated by a good pilot flame to hold the gas valve open. Test before you condemn: measure the thermocouple at ~25–30 mV closed (≈18 mV minimum), or a thermopile at ~350–750 mV.',
+    tip:'<strong>Field note:</strong> If the pilot lights and stays, and the thermocouple/thermopile reads in spec, the thermocouple is NOT your problem — move on to the valve, module, or controls.',
+    type:'choice',
+    answers:[
+      {label:'Pilot won\'t stay lit when you release the knob',sub:'Drops out — weak/failed thermocouple or dirty pilot',style:'warn',next:'boiler_thermocouple'},
+      {label:'Pilot lights and holds, thermocouple/thermopile reads in spec',sub:'Proving voltage is good',style:'yes',next:'boiler_inputs_good'},
+      {label:'No pilot at all — won\'t light',sub:'No gas to pilot, plugged orifice, no spark',style:'warn',next:'boiler_no_fire_basics'},
+    ]
+  },
+
+  boiler_thermocouple:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Pilot won\'t hold — thermocouple / pilot fault',
+    icon:'🔥',
+    finding:'The pilot drops out when you release the gas-valve knob because the flame-proving device isn\'t holding the safety magnet open. That\'s a weak or failed thermocouple/thermopile, a dirty or misaligned pilot not properly engulfing the tip, or a loose/dirty connection at the gas valve.',
+    safety:'You are working at the gas valve with the pilot — follow safe relight procedure, confirm no gas smell, and never force the safety open.',
+    steps:[
+      'Clean the pilot assembly and orifice; confirm a strong blue flame fully engulfing the thermocouple/thermopile tip',
+      'Check and tighten the thermocouple connection at the gas valve (finger-tight plus a quarter turn — don\'t over-torque)',
+      'Measure the thermocouple closed-circuit millivolts (≈25–30 mV, replace under ~18 mV) or thermopile (≈350–750 mV)',
+      'If voltage is low with a good clean pilot flame, replace the thermocouple/thermopile',
+      'If voltage is good but the valve still drops the pilot, suspect the gas-valve safety magnet/valve'
+    ],
+    tools:['Multimeter (millivolt)','Thermocouple/thermopile','Pilot cleaning tools']
+  },
+
+  boiler_inputs_good:{
+    phase:'Phase 2 — Combustion',phasePip:'grey',
+    type:'outcome',
+    title:'Pilot proves out — move past the thermocouple',
+    icon:'🔍',
+    finding:'The pilot lights, holds, and the thermocouple/thermopile reads in spec, so flame proving is good — the thermocouple is not the failure. With the pilot proven, the boiler isn\'t firing the main burner for another reason: the gas valve operator, the call-for-heat/limit string, or a safety isn\'t letting it fire.',
+    safety:null,
+    steps:[
+      'Confirm the call makes it through the limit string: thermostat/aquastat calling, zone valve end switch or circulator relay closed, LWCO satisfied',
+      'On a thermopile (self-powered) system, verify enough millivolts under load to open the main valve',
+      'Check for 24V/120V (per design) at the gas-valve main operator on a call — voltage present but no gas = failed valve',
+      'Verify the aquastat/operating control isn\'t already satisfied or failed, and the high-limit isn\'t open',
+      'Check the low-water cutoff — a tripped or failed LWCO blocks firing even with a good pilot',
+      'If the call reaches the valve and the valve is powered but won\'t open, replace the gas valve'
+    ],
+    tools:['Multimeter','Manometer (gas pressure)','Service manual / wiring diagram']
+  },
+
+  boiler_electronic_ignition:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Electronic-ignition boiler not firing',
+    icon:'🔥',
+    finding:'On a hot-surface or spark-ignition boiler, the ignition module sequences the inducer (if equipped), igniter, and gas valve and proves flame through a sensor. A no-fire is usually a failed igniter, no flame sense, the gas valve not opening, or the module not getting through its safety/prepurge checks.',
+    safety:'Confirm gas is on and at the correct pressure before condemning parts. Never bypass flame-proving or safety circuits.',
+    steps:[
+      'Watch the sequence: call → inducer/prepurge → igniter → gas valve → flame sense; note where it stops',
+      'Hot-surface igniter: check it glows; ohm it (typically ~40–90Ω, open = bad). Spark: confirm a strong spark at the gap',
+      'Igniter works but no flame: check for 24V at the gas valve on the trial, and verify manifold gas pressure',
+      'Flame lights then drops: clean/replace the flame sensor and check the microamp signal and ground',
+      'Confirm the call passes through limits, LWCO, and any vent/pressure safety the module is watching',
+      'Read the module\'s fault LED against its legend — work that fault, don\'t count blinks blindly'
+    ],
+    tools:['Multimeter (incl. microamps)','Manometer','Service manual']
+  },
+
+  boiler_no_fire_basics:{
+    phase:'Phase 2 — Combustion',phasePip:'yellow',
+    type:'outcome',
+    title:'Boiler calls but won\'t fire — work the basics first',
+    icon:'🔧',
+    finding:'No ignition attempt at all points at the basics upstream of the burner: no real call for heat reaching the boiler, gas supply off or low, a tripped safety (high-limit, low-water cutoff, rollout), or no power to the control. Sort these before tearing into ignition components.',
+    safety:'If you smell gas, stop and make the area safe before doing anything else. Treat tripped safeties as real — find why they tripped, don\'t just reset.',
+    steps:[
+      'Confirm a real call for heat: thermostat/aquastat calling, zone valve opening / end switch made, circulator relay energized',
+      'Verify gas is on — main and any appliance shutoff — and static/manifold pressure is in spec',
+      'Check the low-water cutoff and that the system has water and pressure (typically ~12 psi cold)',
+      'Check the high-limit/operating aquastat — open or failed limit blocks firing',
+      'Confirm 120V to the boiler and 24V (or millivolt) control power; check fuses on the board',
+      'Once the call, gas, water, and safeties are confirmed, return to the ignition system for the specific failure'
+    ],
+    tools:['Multimeter','Manometer','Wiring diagram']
   },
 
 } as const;

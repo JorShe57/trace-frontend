@@ -6,6 +6,7 @@ import { saveSession } from '@/lib/api/client';
 import type { EnrichedDiagnosis } from '@/lib/api/types';
 import type { Diagnostic } from '@/lib/useDiagnostic';
 import { useEnrichedOutcome } from '@/lib/useEnrichedOutcome';
+import { formatEquipmentContext } from '@/lib/equipment';
 import type { OutcomeNode } from '@/lib/types';
 
 interface OutcomeProps {
@@ -35,11 +36,13 @@ export function Outcome({ node, diagnostic, unitName, jobId, onBack, onRestart }
     setSaving(true);
     setSaveError(null);
     try {
+      const equipmentLine = formatEquipmentContext(diagnostic.equipment);
       const result = await saveSession({
         path: diagnostic.path,
         unitId: diagnostic.unit?.id,
         outcomeId: diagnostic.currentId,
         completedAt: new Date().toISOString(),
+        notes: equipmentLine ? `Equipment: ${equipmentLine}` : undefined,
         enrichment: data?.enriched,
         claudeModel: data?.model,
         promptVersion: data?.promptVersion,

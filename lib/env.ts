@@ -34,7 +34,7 @@ export function getClaudeModel(): string {
 }
 
 export function getPromptVersion(): string {
-  return process.env.DIAGNOSE_PROMPT_VERSION ?? '1';
+  return process.env.DIAGNOSE_PROMPT_VERSION ?? '2';
 }
 
 export function getSupabaseUrl(): string {

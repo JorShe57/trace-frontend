@@ -3,12 +3,21 @@ import { z } from 'zod';
 import { runDiagnoseStep } from '@/lib/ai/diagnose-step';
 import type { AiDiagnoseRequest } from '@/lib/api/types';
 
+const equipmentSchema = z
+  .object({
+    manufacturer: z.string().optional(),
+    model: z.string().optional(),
+    ageBracket: z.string().optional(),
+  })
+  .optional();
+
 const requestSchema = z.object({
   unit: z.object({ id: z.string(), name: z.string() }),
   complaint: z.string().min(1),
   history: z
     .array(z.object({ question: z.string(), answer: z.string() }))
     .max(20),
+  equipment: equipmentSchema,
   technicianNotes: z.string().optional(),
 });
 
