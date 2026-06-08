@@ -142,7 +142,6 @@ export function findDanglingEdges(): { from: string; to: string }[] {
 if (process.env.NODE_ENV !== 'production') {
   const dangling = findDanglingEdges();
   if (dangling.length > 0) {
-    // eslint-disable-next-line no-console
     console.warn(
       `[T.R.A.C.E.] ${dangling.length} dangling tree edge(s) — these dead-end navigation:`,
       dangling,

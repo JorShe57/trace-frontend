@@ -1,6 +1,6 @@
 # T.R.A.C.E. — Diagnostic Decision Tree
 
-A guided HVAC/R field diagnostic tool, scaffolded as a **Next.js 14 (App Router) + TypeScript + Tailwind** front end. Walk a customer complaint through Controls → Equipment → Visual → Performance phases to a likely cause, complete with next steps, safety flags and the tools required.
+A guided HVAC/R field diagnostic tool, scaffolded as a **Next.js 16 (App Router) + TypeScript + Tailwind** front end. Walk a customer complaint through Controls → Equipment → Visual → Performance phases to a likely cause, complete with next steps, safety flags and the tools required.
 
 This is a faithful, lightly-polished port of the original single-file HTML prototype.
 
@@ -13,6 +13,37 @@ npm run dev
 ```
 
 Other scripts: `npm run build`, `npm run start`, `npm run lint`, `npm run typecheck`.
+
+Requires **Node.js 20.9+**.
+
+## Deploy to Vercel
+
+### Option A — Git integration (recommended)
+
+1. Push this repo to GitHub.
+2. Import the project at [vercel.com/new](https://vercel.com/new).
+3. Vercel auto-detects Next.js — no extra build settings needed.
+4. Every push to `main` deploys to production; PRs get preview URLs.
+
+### Option B — Vercel CLI
+
+```bash
+npm install -g vercel
+vercel          # preview deployment
+vercel --prod   # production deployment
+```
+
+### Option C — GitHub Actions
+
+`.github/workflows/vercel-deploy.yml` deploys via the Vercel CLI. Add these repository secrets:
+
+| Secret | Where to find it |
+|--------|------------------|
+| `VERCEL_TOKEN` | [vercel.com/account/tokens](https://vercel.com/account/tokens) |
+| `VERCEL_ORG_ID` | `.vercel/project.json` after `vercel link` |
+| `VERCEL_PROJECT_ID` | `.vercel/project.json` after `vercel link` |
+
+`.github/workflows/ci.yml` runs typecheck, lint, and build on every push/PR (no Vercel secrets required).
 
 ## How it works
 
