@@ -66,11 +66,20 @@ export default function Home() {
           </p>
 
           <Link
-            href="/diagnostic/start"
+            href="/diagnostic/ai"
             className="inline-block rounded-[4px] border border-accent bg-[var(--accent-dim)] px-6 py-2.5 font-head text-[14px] font-semibold uppercase tracking-[0.1em] text-accent transition-colors hover:bg-[var(--accent-dim)]"
           >
             Start a diagnostic →
           </Link>
+
+          <div className="mt-3">
+            <Link
+              href="/diagnostic/start"
+              className="font-mono text-[10px] uppercase tracking-[0.08em] text-text3 transition-colors hover:text-accent"
+            >
+              or use the classic guided tree →
+            </Link>
+          </div>
         </div>
 
         {resume && (

@@ -46,7 +46,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
         <div className="ml-auto flex items-center gap-2">
           <Link
-            href="/diagnostic/start"
+            href="/diagnostic/ai"
             className="hidden rounded-[3px] border border-accent bg-[var(--accent-dim)] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent transition-colors hover:bg-[var(--accent-faint)] sm:inline-block"
           >
             + New diagnostic

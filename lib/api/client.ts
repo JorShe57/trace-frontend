@@ -1,4 +1,6 @@
 import type {
+  AiDiagnoseRequest,
+  AiDiagnoseResponse,
   DiagnosticSessionPayload,
   EnrichDiagnosisRequest,
   EnrichDiagnosisResponse,
@@ -26,6 +28,17 @@ export async function enrichDiagnosis(
     body: JSON.stringify(payload),
   });
   return parseJson<EnrichDiagnosisResponse>(res);
+}
+
+export async function diagnoseStep(
+  payload: AiDiagnoseRequest,
+): Promise<AiDiagnoseResponse> {
+  const res = await fetch('/api/diagnose/step', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  return parseJson<AiDiagnoseResponse>(res);
 }
 
 export async function saveSession(
