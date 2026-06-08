@@ -1,32 +1,13 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { readLastPath } from '@/lib/useDiagnostic';
-import { buildHistory, getNode } from '@/lib/engine';
+import { useResume } from '@/lib/useDiagnostic';
 import { LogoMark, WordMark } from '@/components/Logo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-function readResume(): { href: string; label: string } | null {
-  const last = readLastPath();
-  if (!last) return null;
-  const node = getNode(last[last.length - 1]);
-  const history = buildHistory(last);
-  const where =
-    node && node.type === 'outcome'
-      ? node.title
-      : node && 'question' in node
-        ? node.question
-        : 'In progress';
-  return {
-    href: `/diagnostic/${last.join('/')}`,
-    label: `${history.length} step${history.length === 1 ? '' : 's'} in · ${where}`,
-  };
-}
-
 /** Landing screen: brand intro, primary start, and resume-last-session. */
 export default function Home() {
-  const resume = useSyncExternalStore(() => () => {}, readResume, () => null);
+  const resume = useResume();
 
   return (
     <div className="flex min-h-screen flex-col">

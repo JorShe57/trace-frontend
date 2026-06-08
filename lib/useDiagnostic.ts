@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useSyncExternalStore } from 'react';
 import {
   ROOT_ID,
   breadcrumb,
@@ -104,4 +104,50 @@ export function readLastPath(): string[] | null {
     /* ignore */
   }
   return null;
+}
+
+export interface ResumeInfo {
+  href: string;
+  label: string;
+}
+
+let cachedPathKey = '';
+let cachedResume: ResumeInfo | null = null;
+
+function buildResume(path: string[]): ResumeInfo {
+  const node = getNode(path[path.length - 1]);
+  const history = buildHistory(path);
+  const where =
+    node && node.type === 'outcome'
+      ? node.title
+      : node && 'question' in node
+        ? node.question
+        : 'In progress';
+  return {
+    href: pathToHref(path),
+    label: `${history.length} step${history.length === 1 ? '' : 's'} in · ${where}`,
+  };
+}
+
+/** Cached snapshot — useSyncExternalStore requires stable references between reads. */
+function readResumeSnapshot(): ResumeInfo | null {
+  const last = readLastPath();
+  const key = last ? last.join('/') : '';
+  if (key === cachedPathKey) return cachedResume;
+  cachedPathKey = key;
+  cachedResume = last ? buildResume(last) : null;
+  return cachedResume;
+}
+
+function subscribeLastPath(callback: () => void) {
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === LAST_PATH_KEY) callback();
+  };
+  window.addEventListener('storage', onStorage);
+  return () => window.removeEventListener('storage', onStorage);
+}
+
+/** Resume banner data from the last persisted diagnostic path. */
+export function useResume(): ResumeInfo | null {
+  return useSyncExternalStore(subscribeLastPath, readResumeSnapshot, () => null);
 }
