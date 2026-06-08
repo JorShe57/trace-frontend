@@ -38,7 +38,13 @@ export default function Home() {
             Diagnostic Decision Tree
           </div>
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+          <Link
+            href="/dashboard"
+            className="rounded-[3px] border border-border2 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-text2 transition-colors hover:border-accent hover:text-accent"
+          >
+            Sign in
+          </Link>
           <ThemeToggle />
         </div>
       </header>

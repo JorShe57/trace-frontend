@@ -1,13 +1,23 @@
-# T.R.A.C.E. — Diagnostic Decision Tree
+# T.R.A.C.E. — Field Diagnostics & Project Tracker
 
-A guided HVAC/R field diagnostic tool, scaffolded as a **Next.js 16 (App Router) + TypeScript + Tailwind** front end. Walk a customer complaint through Controls → Equipment → Visual → Performance phases to a likely cause, complete with next steps, safety flags and the tools required.
+A guided HVAC/R field diagnostic tool **and** a lightweight project tracker,
+built as a **Next.js 16 (App Router) + TypeScript + Tailwind** front end backed
+by **Supabase** (auth + Postgres + RLS).
 
-This is a faithful, lightly-polished port of the original single-file HTML prototype.
+Two halves, one app:
+
+- **Public diagnostic** — walk a customer complaint through Controls → Equipment
+  → Visual → Performance to a likely cause, with next steps, safety flags, the
+  tools required, and optional Claude-powered enrichment. No login needed.
+- **Signed-in workspace** — technicians get a dashboard, saved reports, and a
+  customers → sites → equipment hierarchy with jobs/work orders. Every row is
+  scoped to its owner with Postgres row-level security.
 
 ## Getting started
 
 ```bash
 npm install
+cp .env.example .env.local   # then fill in your Supabase + Anthropic keys
 npm run dev
 # open http://localhost:3000
 ```
@@ -15,6 +25,46 @@ npm run dev
 Other scripts: `npm run build`, `npm run start`, `npm run lint`, `npm run typecheck`.
 
 Requires **Node.js 20.9+**.
+
+### Environment
+
+See `.env.example`. You need a Supabase project (URL + anon key + service-role
+key) and, for AI enrichment, an `ANTHROPIC_API_KEY`. The anon key drives
+cookie-based auth and RLS; the service-role key is server-only.
+
+### Database
+
+Apply the SQL migrations in `supabase/migrations/` to your project (via the
+Supabase CLI `supabase db push`, or by pasting them into the SQL editor in
+order):
+
+- `…_diagnostic_sessions.sql` — the saved-diagnostics table.
+- `…_auth_and_projects.sql` — `profiles` (auto-created on sign-up), the
+  `customers → sites → equipment` hierarchy, `jobs`, the new `user_id` /
+  `equipment_id` / `job_id` columns on `diagnostic_sessions`, and the RLS
+  policies that scope every table to its owner.
+
+Auth uses email/password by default. Enable "Confirm email" in the Supabase
+dashboard if you want the email-confirmation flow (handled by
+`app/auth/callback`).
+
+## Auth & the project tracker
+
+| Route | What it is |
+|-------|------------|
+| `/login`, `/signup` | Email/password auth (Supabase). |
+| `/dashboard` | KPIs (open jobs, scheduled this week, customers, reports) + recent activity. |
+| `/reports`, `/reports/[id]` | Saved diagnostics — list and a full report view. |
+| `/customers`, `/customers/[id]` | Accounts, their sites, and the equipment at each site. |
+| `/jobs`, `/jobs/[id]` | Work orders with status/priority, scheduling, and linked diagnostics. |
+| `/account` | Technician profile. |
+
+`proxy.ts` (Next 16's renamed middleware) refreshes the Supabase session on
+every request and gates the workspace routes behind sign-in. Server reads use
+an RLS-scoped client (`lib/supabase/server.ts`), so a query can only ever see
+the signed-in user's rows. Finishing a diagnostic while logged in and tapping
+**Save report** tags the row with your `user_id` (and `job_id` if you launched
+it from a job).
 
 ## Deploy to Vercel
 
@@ -107,9 +157,13 @@ Tokens are CSS variables in `globals.css`; Tailwind references them
 
 ## Notes / next steps
 
-- `app/api/sessions/route.ts` is a stub — wire it to a datastore to log
-  completed diagnostics, then POST from the Outcome card.
 - The tree could later be lifted into JSON/CMS without touching the render
   layer — `lib/engine.ts` only depends on the `TreeMap` shape.
 - Content (findings, steps, safety) is field guidance from the original
   prototype — review with an HVAC SME before production use.
+- Natural next features for the field: **offline-first / PWA** (queue saves in
+  dead zones), **photo attachments** on equipment and reports (Supabase
+  Storage), **PDF/share export** of a report for the customer or office, and
+  **structured measurement capture** (superheat/subcool, static pressure, amp
+  draws) instead of free-text notes. Team/org roles can build on the existing
+  `profiles.role` column.

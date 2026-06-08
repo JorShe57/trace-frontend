@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { saveSession } from '@/lib/api/client';
 import type { EnrichedDiagnosis } from '@/lib/api/types';
 import type { Diagnostic } from '@/lib/useDiagnostic';
@@ -11,12 +12,13 @@ interface OutcomeProps {
   node: OutcomeNode;
   diagnostic: Diagnostic;
   unitName?: string;
+  jobId?: string;
   onBack: () => void;
   onRestart: () => void;
 }
 
 /** Terminal diagnosis card: static tree content + Claude enrichment + save. */
-export function Outcome({ node, diagnostic, unitName, onBack, onRestart }: OutcomeProps) {
+export function Outcome({ node, diagnostic, unitName, jobId, onBack, onRestart }: OutcomeProps) {
   const { data, loading, error, retry } = useEnrichedOutcome(diagnostic, node);
   const [saving, setSaving] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
@@ -41,6 +43,8 @@ export function Outcome({ node, diagnostic, unitName, onBack, onRestart }: Outco
         enrichment: data?.enriched,
         claudeModel: data?.model,
         promptVersion: data?.promptVersion,
+        title: node.title,
+        jobId,
       });
       setSavedId(result.id);
     } catch (err) {
@@ -150,7 +154,9 @@ export function Outcome({ node, diagnostic, unitName, onBack, onRestart }: Outco
         </button>
         <div className="ml-auto flex items-center gap-2">
           {savedId && (
-            <span className="font-mono text-[9px] text-accent">Saved · {savedId.slice(0, 8)}…</span>
+            <Link href={`/reports/${savedId}`} className="font-mono text-[9px] text-accent hover:underline">
+              Saved · View report →
+            </Link>
           )}
           {saveError && (
             <span className="font-mono text-[9px] text-danger">{saveError}</span>

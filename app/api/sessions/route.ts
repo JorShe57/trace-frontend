@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { insertSession, listSessions } from '@/lib/db/sessions';
+import { insertSession, listUserSessions } from '@/lib/db/sessions';
 import { enrichedDiagnosisSchema } from '@/lib/ai/schemas';
+import { createClient } from '@/lib/supabase/server';
 import type { DiagnosticSessionPayload } from '@/lib/api/types';
 
 const sessionSchema = z.object({
@@ -13,6 +14,9 @@ const sessionSchema = z.object({
   enrichment: enrichedDiagnosisSchema.optional(),
   claudeModel: z.string().optional(),
   promptVersion: z.string().optional(),
+  equipmentId: z.string().uuid().optional(),
+  jobId: z.string().uuid().optional(),
+  title: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -33,7 +37,17 @@ export async function POST(request: Request) {
 
   try {
     const payload = parsed.data as DiagnosticSessionPayload;
-    const { id } = await insertSession(payload);
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    // Signed-in: write through the user's RLS client and tag the row with
+    // their id. Signed-out: anonymous service-role write (legacy behaviour).
+    const { id } = user
+      ? await insertSession(payload, { client: supabase, userId: user.id })
+      : await insertSession(payload);
+
     return NextResponse.json({ id }, { status: 201 });
   } catch (error) {
     console.error('[POST /api/sessions]', error);
@@ -44,7 +58,16 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const sessions = await listSessions();
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    const sessions = await listUserSessions(supabase);
     return NextResponse.json({ sessions });
   } catch (error) {
     console.error('[GET /api/sessions]', error);

@@ -51,6 +51,10 @@ export interface DiagnosticSessionPayload {
   enrichment?: EnrichedDiagnosis;
   claudeModel?: string;
   promptVersion?: string;
+  /** Optional links into the project tracker. */
+  equipmentId?: string;
+  jobId?: string;
+  title?: string;
 }
 
 export interface SaveSessionResponse {

@@ -16,7 +16,7 @@ const MAX_DEPTH = 12;
  * Top-level diagnostic screen. The URL's catch-all segments are passed in as
  * `path`; everything else (history, progress, keyboard nav) derives from it.
  */
-export function DiagnosticView({ path: rawPath }: { path: string[] }) {
+export function DiagnosticView({ path: rawPath, jobId }: { path: string[]; jobId?: string }) {
   const dx = useDiagnostic(rawPath);
   const { current, history, unit, crumbs, isOutcome, navigate, back, restart } = dx;
 
@@ -95,6 +95,7 @@ export function DiagnosticView({ path: rawPath }: { path: string[] }) {
             node={current}
             diagnostic={dx}
             unitName={unit?.name}
+            jobId={jobId}
             onBack={back}
             onRestart={restart}
           />
