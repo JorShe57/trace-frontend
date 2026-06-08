@@ -50,7 +50,7 @@ export default async function ReportsPage() {
                 {s.enrichment?.confidence && <Badge tone="open">{s.enrichment.confidence}</Badge>}
                 {s.enrichment && <Badge tone="open">AI</Badge>}
                 <ButtonLink href={`/reports/${s.id}/chat`} variant="ghost" className="px-2 py-1">
-                  Ask AI
+                  Ask Trace
                 </ButtonLink>
               </div>
             );
