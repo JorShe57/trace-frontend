@@ -99,7 +99,7 @@ export default async function JobDetailPage({
                       </span>
                     </Link>
                     <ButtonLink href={`/reports/${s.id}/chat`} variant="ghost" className="px-2 py-1">
-                      Ask AI
+                      Ask Trace
                     </ButtonLink>
                   </li>
                 ))}

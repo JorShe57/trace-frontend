@@ -153,7 +153,7 @@ export default async function DashboardPage() {
                     variant="ghost"
                     className="px-2 py-1"
                   >
-                    Ask AI
+                    Ask Trace
                   </ButtonLink>
                 </div>
               ))}
