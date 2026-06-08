@@ -21,6 +21,15 @@ export default function EpaStudyGuidePage() {
         }
       />
 
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <Link
+          href="/tools/epa-quiz"
+          className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent hover:underline"
+        >
+          Test yourself with the practice quiz →
+        </Link>
+      </div>
+
       {/* What the exam covers */}
       <Card className="mb-5 p-4">
         <SectionLabel>How the exam is structured</SectionLabel>

@@ -15,6 +15,11 @@ const TOOLS = [
     name: 'EPA 608 Study Guide',
     blurb: 'Flashcards by certification section to prep for the refrigerant exam.',
   },
+  {
+    href: '/tools/epa-quiz',
+    name: 'EPA 608 Practice Quiz',
+    blurb: 'Scored multiple-choice practice test with instant feedback and review.',
+  },
 ];
 
 export default function ToolsPage() {
