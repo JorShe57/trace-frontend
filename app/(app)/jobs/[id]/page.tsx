@@ -79,7 +79,7 @@ export default async function JobDetailPage({
             <div className="mb-2 flex items-center justify-between">
               <SectionLabel>Diagnostics on this job</SectionLabel>
               <ButtonLink
-                href={`/diagnostic/start?job=${job.id}`}
+                href={`/diagnostic/ai?job=${job.id}`}
                 variant="ghost"
                 className="px-2 py-1"
               >
