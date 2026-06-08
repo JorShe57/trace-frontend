@@ -10,6 +10,16 @@ const TOOLS = [
     name: 'Refrigerant Calculator',
     blurb: 'Superheat & subcooling from gauge pressure and line temperatures.',
   },
+  {
+    href: '/tools/epa-study-guide',
+    name: 'EPA 608 Study Guide',
+    blurb: 'Flashcards by certification section to prep for the refrigerant exam.',
+  },
+  {
+    href: '/tools/epa-quiz',
+    name: 'EPA 608 Practice Quiz',
+    blurb: 'Scored multiple-choice practice test with instant feedback and review.',
+  },
 ];
 
 export default function ToolsPage() {
