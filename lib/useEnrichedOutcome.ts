@@ -25,6 +25,12 @@ export function useEnrichedOutcome(
 
   const retry = () => setTick((t) => t + 1);
 
+  // Re-fetch only when the outcome's identity changes (which path/node we're
+  // looking at), not when unrelated diagnostic fields mutate. The other values
+  // read below are a stable snapshot for a given node, so they're intentionally
+  // excluded from the dependency array.
+  const pathKey = diagnostic.path.join('/');
+
   useEffect(() => {
     abortRef.current?.abort();
     const controller = new AbortController();
@@ -65,7 +71,8 @@ export function useEnrichedOutcome(
       });
 
     return () => controller.abort();
-  }, [diagnostic.path.join('/'), diagnostic.currentId, diagnostic.unit?.id, node.title, tick]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional identity-only key; see comment above
+  }, [pathKey, diagnostic.currentId, diagnostic.unit?.id, node.title, tick]);
 
   return { data, loading, error, retry };
 }
