@@ -8,6 +8,7 @@ const LINKS = [
   { href: '/reports', label: 'Reports' },
   { href: '/customers', label: 'Customers' },
   { href: '/jobs', label: 'Jobs' },
+  { href: '/tools', label: 'Tools' },
 ];
 
 /** Primary in-app navigation. Highlights the active section. */
