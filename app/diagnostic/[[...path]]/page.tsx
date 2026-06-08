@@ -8,10 +8,13 @@ import { ROOT_ID } from '@/lib/engine';
  */
 export default async function DiagnosticPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ path?: string[] }>;
+  searchParams: Promise<{ job?: string }>;
 }) {
   const { path: pathSegments } = await params;
+  const { job } = await searchParams;
   const path = pathSegments && pathSegments.length > 0 ? pathSegments : [ROOT_ID];
-  return <DiagnosticView path={path} />;
+  return <DiagnosticView path={path} jobId={job} />;
 }
