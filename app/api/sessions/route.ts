@@ -1,45 +1,54 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { insertSession, listSessions } from '@/lib/db/sessions';
+import { enrichedDiagnosisSchema } from '@/lib/ai/schemas';
+import type { DiagnosticSessionPayload } from '@/lib/api/types';
 
-/**
- * Stub session API — a placeholder for persisting completed diagnostics
- * (e.g. for analytics, tech reports, or a service-history backend).
- *
- * Wire this up to your datastore of choice later. For now it validates the
- * shape and echoes back a fake id so the front end can be built against it.
- */
-
-export interface DiagnosticSession {
-  /** The node-id chain the technician walked. */
-  path: string[];
-  /** Equipment unit id chosen at the start. */
-  unitId?: string;
-  /** Final outcome node id, if completed. */
-  outcomeId?: string;
-  /** ISO timestamp the session was submitted. */
-  completedAt?: string;
-  /** Optional free-text notes from the technician. */
-  notes?: string;
-}
+const sessionSchema = z.object({
+  path: z.array(z.string()).min(1),
+  unitId: z.string().optional(),
+  outcomeId: z.string().optional(),
+  completedAt: z.string().optional(),
+  notes: z.string().optional(),
+  enrichment: enrichedDiagnosisSchema.optional(),
+  claudeModel: z.string().optional(),
+  promptVersion: z.string().optional(),
+});
 
 export async function POST(request: Request) {
-  let body: DiagnosticSession;
+  let body: unknown;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  if (!Array.isArray(body.path) || body.path.length === 0) {
-    return NextResponse.json({ error: 'path is required' }, { status: 422 });
+  const parsed = sessionSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Invalid request', details: parsed.error.flatten() },
+      { status: 422 },
+    );
   }
 
-  // TODO: persist `body` to a datastore here.
-  const id = `sess_${Date.now().toString(36)}`;
-
-  return NextResponse.json({ id, received: body }, { status: 201 });
+  try {
+    const payload = parsed.data as DiagnosticSessionPayload;
+    const { id } = await insertSession(payload);
+    return NextResponse.json({ id }, { status: 201 });
+  } catch (error) {
+    console.error('[POST /api/sessions]', error);
+    const message = error instanceof Error ? error.message : 'Failed to save session';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
 
 export async function GET() {
-  // TODO: return stored sessions. Stubbed empty for now.
-  return NextResponse.json({ sessions: [] });
+  try {
+    const sessions = await listSessions();
+    return NextResponse.json({ sessions });
+  } catch (error) {
+    console.error('[GET /api/sessions]', error);
+    const message = error instanceof Error ? error.message : 'Failed to load sessions';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }

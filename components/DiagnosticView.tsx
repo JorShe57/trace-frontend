@@ -91,7 +91,13 @@ export function DiagnosticView({ path: rawPath }: { path: string[] }) {
           <StepCard node={current} step={history.length + 1} onAnswer={navigate} />
         )}
         {current.type === 'outcome' && (
-          <Outcome node={current} unitName={unit?.name} onBack={back} onRestart={restart} />
+          <Outcome
+            node={current}
+            diagnostic={dx}
+            unitName={unit?.name}
+            onBack={back}
+            onRestart={restart}
+          />
         )}
 
         <KeyboardHint type={current.type} />
