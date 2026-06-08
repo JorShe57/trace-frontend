@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AskTraceChat } from '@/components/AskTraceChat';
 import { Badge, ButtonLink, Card, EmptyState, PageHeading, SectionLabel } from '@/components/ui';
 import { createClient } from '@/lib/supabase/server';
 import { getNode } from '@/lib/engine';
@@ -77,6 +78,16 @@ export default async function DashboardPage() {
         <Kpi label="Customers" value={customerCount.count ?? 0} href="/customers" />
         <Kpi label="Saved reports" value={reportCount.count ?? sessions.length} href="/reports" />
       </div>
+
+      <section className="mb-7">
+        <div className="mb-2 flex items-center justify-between">
+          <SectionLabel>Ask Trace</SectionLabel>
+          <Link href="/ask" className="font-mono text-[9px] text-text3 hover:text-accent">
+            Open full view →
+          </Link>
+        </div>
+        <AskTraceChat minHeight={300} />
+      </section>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <section>
