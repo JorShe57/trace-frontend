@@ -8,7 +8,7 @@ const TOOLS = [
   {
     href: '/tools/refrigerant-calculator',
     name: 'Refrigerant Calculator',
-    blurb: 'Superheat & subcooling from saturation and line temperatures.',
+    blurb: 'Superheat & subcooling from gauge pressure and line temperatures.',
   },
 ];
 
