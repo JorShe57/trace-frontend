@@ -62,11 +62,11 @@ export default async function JobsPage({
             <Link
               key={job.id}
               href={`/jobs/${job.id}`}
-              className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-bg3"
+              className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-bg3"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="truncate text-[13px] text-text">{job.title}</span>
+                  <span className="truncate text-[13.5px] font-medium text-text">{job.title}</span>
                   {job.priority !== 'normal' && OPEN_STATUSES.includes(job.status) && (
                     <Badge tone={job.priority}>{job.priority}</Badge>
                   )}

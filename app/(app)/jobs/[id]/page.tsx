@@ -93,7 +93,7 @@ export default async function JobDetailPage({
                 {sessions.map((s) => (
                   <li key={s.id} className="flex items-center justify-between gap-3 py-2.5">
                     <Link href={`/reports/${s.id}`} className="min-w-0 flex-1 hover:text-accent">
-                      <span className="truncate text-[13px] text-text">{sessionTitle(s)}</span>
+                      <span className="truncate text-[13.5px] font-medium text-text">{sessionTitle(s)}</span>
                       <span className="block text-[12px] text-text3">
                         {new Date(s.created_at).toLocaleDateString()}
                       </span>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { AskTraceChat } from '@/components/AskTraceChat';
-import { Badge, ButtonLink, Card, EmptyState, PageHeading, SectionLabel } from '@/components/ui';
+import { Badge, ButtonLink, Card, EmptyState, PageHeading, SectionHeader } from '@/components/ui';
 import { createClient } from '@/lib/supabase/server';
 import { getNode } from '@/lib/engine';
 import type { Job } from '@/lib/db/types';
@@ -28,10 +28,12 @@ function Kpi({ label, value, href }: { label: string; value: number | string; hr
   return (
     <Link
       href={href}
-      className="rounded-card border border-border2 bg-bg2 px-4 py-4 transition-colors hover:border-accent"
+      className="rounded-card border border-border bg-bg2 px-5 py-4 shadow-card transition-colors hover:border-border2 hover:bg-bg3"
     >
-      <div className="text-[28px] font-semibold tracking-[-0.02em] leading-none text-text">{value}</div>
-      <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">{label}</div>
+      <div className="text-[13px] text-text2">{label}</div>
+      <div className="mt-2 text-[30px] font-semibold leading-none tracking-[-0.02em] text-text">
+        {value}
+      </div>
     </Link>
   );
 }
@@ -72,31 +74,21 @@ export default async function DashboardPage() {
         }
       />
 
-      <div className="mb-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mb-8 grid grid-cols-2 gap-3.5 sm:grid-cols-4">
         <Kpi label="Open jobs" value={openJobs.count ?? 0} href="/jobs" />
         <Kpi label="Scheduled this week" value={weekJobs.count ?? 0} href="/jobs" />
         <Kpi label="Customers" value={customerCount.count ?? 0} href="/customers" />
         <Kpi label="Saved reports" value={reportCount.count ?? sessions.length} href="/reports" />
       </div>
 
-      <section className="mb-7">
-        <div className="mb-2 flex items-center justify-between">
-          <SectionLabel>Ask Trace</SectionLabel>
-          <Link href="/ask" className="text-[12px] text-text3 hover:text-accent">
-            Open full view →
-          </Link>
-        </div>
+      <section className="mb-8">
+        <SectionHeader title="Ask Trace" href="/ask" linkLabel="Open full view →" />
         <AskTraceChat minHeight={300} />
       </section>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         <section>
-          <div className="mb-2 flex items-center justify-between">
-            <SectionLabel>Open jobs</SectionLabel>
-            <Link href="/jobs" className="text-[12px] text-text3 hover:text-accent">
-              View all →
-            </Link>
-          </div>
+          <SectionHeader title="Open jobs" href="/jobs" />
           {openJobList.length === 0 ? (
             <EmptyState
               title="No open jobs"
@@ -108,10 +100,10 @@ export default async function DashboardPage() {
               {openJobList.map((job) => (
                 <div
                   key={job.id}
-                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-bg3"
+                  className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-bg3"
                 >
                   <Link href={`/jobs/${job.id}`} className="min-w-0 flex-1">
-                    <div className="truncate text-[13px] text-text">{job.title}</div>
+                    <div className="truncate text-[13.5px] font-medium text-text">{job.title}</div>
                     <div className="text-[12px] text-text3">
                       {job.scheduled_for
                         ? `Scheduled ${new Date(job.scheduled_for).toLocaleDateString()}`
@@ -133,12 +125,7 @@ export default async function DashboardPage() {
         </section>
 
         <section>
-          <div className="mb-2 flex items-center justify-between">
-            <SectionLabel>Saved reports</SectionLabel>
-            <Link href="/reports" className="text-[12px] text-text3 hover:text-accent">
-              View all →
-            </Link>
-          </div>
+          <SectionHeader title="Saved reports" href="/reports" />
           {sessions.length === 0 ? (
             <EmptyState
               title="No saved reports yet"
@@ -150,10 +137,10 @@ export default async function DashboardPage() {
               {sessions.map((s) => (
                 <div
                   key={s.id}
-                  className="flex items-center gap-2 px-4 py-3 transition-colors hover:bg-bg3"
+                  className="flex items-center gap-2 px-4 py-3.5 transition-colors hover:bg-bg3"
                 >
                   <Link href={`/reports/${s.id}`} className="min-w-0 flex-1">
-                    <div className="truncate text-[13px] text-text">{outcomeTitle(s)}</div>
+                    <div className="truncate text-[13.5px] font-medium text-text">{outcomeTitle(s)}</div>
                     <div className="text-[12px] text-text3">
                       {new Date(s.created_at).toLocaleDateString()}
                     </div>
@@ -173,8 +160,8 @@ export default async function DashboardPage() {
         </section>
       </div>
 
-      <div className="mt-5 rounded-card border border-border2 bg-bg2 px-4 py-3">
-        <SectionLabel>Quick start</SectionLabel>
+      <div className="mt-6 rounded-card border border-border bg-bg2 px-5 py-4 shadow-card">
+        <h2 className="mb-3 text-[15px] font-semibold tracking-[-0.01em] text-text">Quick start</h2>
         <div className="flex flex-wrap gap-2">
           <ButtonLink href="/diagnostic/ai">AI diagnostic</ButtonLink>
           <ButtonLink href="/jobs/new" variant="ghost">

@@ -33,10 +33,10 @@ export default async function CustomersPage() {
             <Link
               key={c.id}
               href={`/customers/${c.id}`}
-              className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-bg3"
+              className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-bg3"
             >
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] text-text">{c.name}</div>
+                <div className="truncate text-[13.5px] font-medium text-text">{c.name}</div>
                 <div className="mt-0.5 text-[12px] text-text3">
                   {[c.contact_name, c.phone, c.email].filter(Boolean).join(' · ') || 'No contact info'}
                 </div>

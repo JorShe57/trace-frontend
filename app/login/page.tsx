@@ -19,8 +19,8 @@ export default async function LoginPage({
 
   return (
     <AuthShell tagline="Field Diagnostics &amp; Project Tracker">
-      <Card className="px-5 py-6">
-        <h1 className="mb-1 text-[16px] font-semibold tracking-[-0.01em] text-text">Sign in</h1>
+      <Card className="px-6 py-7 shadow-pop">
+        <h1 className="mb-1 text-[18px] font-semibold tracking-[-0.015em] text-text">Sign in</h1>
         <p className="mb-4 text-[12px] text-text2">Access your reports, customers and jobs.</p>
 
         {notice && (

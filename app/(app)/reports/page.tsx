@@ -37,10 +37,10 @@ export default async function ReportsPage() {
             return (
               <div
                 key={s.id}
-                className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-bg3"
+                className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-bg3"
               >
                 <Link href={`/reports/${s.id}`} className="min-w-0 flex-1">
-                  <div className="truncate text-[13px] text-text">{title(s)}</div>
+                  <div className="truncate text-[13.5px] font-medium text-text">{title(s)}</div>
                   <div className="mt-0.5 text-[12px] text-text3">
                     {[unit ? unit.name : null, new Date(s.created_at).toLocaleString()]
                       .filter(Boolean)

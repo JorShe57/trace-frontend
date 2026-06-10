@@ -39,10 +39,35 @@ export function PageHeading({
   return (
     <div className="mb-6 flex items-end justify-between gap-4">
       <div>
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-text">{title}</h1>
-        {subtitle && <p className="mt-1 text-[13px] text-text2">{subtitle}</p>}
+        <h1 className="text-[26px] font-semibold tracking-[-0.025em] text-text">{title}</h1>
+        {subtitle && <p className="mt-1 text-[13.5px] text-text2">{subtitle}</p>}
       </div>
       {action}
+    </div>
+  );
+}
+
+/** Heading row for a dashboard/list section, with an optional trailing link. */
+export function SectionHeader({
+  title,
+  href,
+  linkLabel = 'View all →',
+}: {
+  title: string;
+  href?: string;
+  linkLabel?: string;
+}) {
+  return (
+    <div className="mb-3 flex items-center justify-between">
+      <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-text">{title}</h2>
+      {href && (
+        <Link
+          href={href}
+          className="text-[12.5px] font-medium text-text3 transition-colors hover:text-text"
+        >
+          {linkLabel}
+        </Link>
+      )}
     </div>
   );
 }
