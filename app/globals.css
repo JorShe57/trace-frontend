@@ -1,58 +1,69 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ───────────────────────── Design tokens ─────────────────────────
+   A layered neutral palette with a single refined emerald accent.
    Dark is the default field aesthetic. Light is a high-contrast
    alternative for bright environments / printing. Swapping
-   [data-theme] re-points every token the UI references. */
+   [data-theme] re-points every token the UI references.
+
+   Fonts are self-hosted via next/font (app/layout.tsx) and exposed
+   as --font-sans / --font-mono; the legacy --hf/--bf/--mf aliases
+   keep existing utilities working. */
 :root,
 [data-theme='dark'] {
-  --bg: #080808;
-  --bg2: #0d0d0d;
-  --bg3: #121212;
-  --bg4: #1a1a1a;
-  --border: #1c1c1c;
-  --border2: #2a2a2a;
-  --text: #e0e0e0;
-  --text2: #888888;
-  --text3: #5a5a5a;
-  --accent: #39d353;
-  --accent2: #22a83e;
-  --accent-dim: rgba(57, 211, 83, 0.1);
-  --accent-faint: rgba(57, 211, 83, 0.05);
-  --red: #e05252;
-  --red-bg: rgba(224, 82, 82, 0.08);
-  --yellow: #d4b800;
-  --yellow-bg: rgba(212, 184, 0, 0.08);
+  --bg: #09090b;
+  --bg2: #0e0e11;
+  --bg3: #141417;
+  --bg4: #1b1b1f;
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.12);
+  --text: #f4f4f5;
+  --text2: #a1a1aa;
+  --text3: #6e6e78;
+  --accent: #10b981;
+  --accent2: #34d399;
+  --accent-contrast: #ffffff;
+  --accent-dim: rgba(16, 185, 129, 0.13);
+  --accent-faint: rgba(16, 185, 129, 0.07);
+  --red: #f26d6d;
+  --red-bg: rgba(239, 68, 68, 0.1);
+  --yellow: #e7a13d;
+  --yellow-bg: rgba(217, 119, 6, 0.12);
 
-  --hf: 'Barlow Condensed', sans-serif;
-  --mf: 'JetBrains Mono', monospace;
-  --bf: 'Barlow', sans-serif;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+  --hf: var(--font-sans), system-ui, sans-serif;
+  --bf: var(--font-sans), system-ui, sans-serif;
+  --mf: var(--font-mono), ui-monospace, monospace;
 
   color-scheme: dark;
 }
 
 [data-theme='light'] {
-  --bg: #eceee9;
+  --bg: #fafafa;
   --bg2: #ffffff;
-  --bg3: #f7f8f5;
-  --bg4: #eef0eb;
-  --border: #e0e3dd;
-  --border2: #cfd3cb;
-  --text: #181a16;
-  --text2: #565a53;
-  --text3: #888d84;
-  --accent: #1f9d4d;
-  --accent2: #15793a;
-  --accent-dim: rgba(31, 157, 77, 0.12);
-  --accent-faint: rgba(31, 157, 77, 0.07);
-  --red: #c23a39;
-  --red-bg: rgba(194, 58, 57, 0.08);
-  --yellow: #927000;
-  --yellow-bg: rgba(146, 112, 0, 0.1);
+  --bg3: #f4f4f5;
+  --bg4: #ececee;
+  --border: #e8e8ea;
+  --border2: #d9d9dc;
+  --text: #18181b;
+  --text2: #52525b;
+  --text3: #8c8c94;
+  --accent: #059669;
+  --accent2: #047857;
+  --accent-contrast: #ffffff;
+  --accent-dim: rgba(5, 150, 105, 0.1);
+  --accent-faint: rgba(5, 150, 105, 0.06);
+  --red: #dc2626;
+  --red-bg: rgba(220, 38, 38, 0.07);
+  --yellow: #b45309;
+  --yellow-bg: rgba(180, 83, 9, 0.09);
+
+  --shadow-card: 0 1px 2px rgba(24, 24, 27, 0.05);
+  --shadow-pop: 0 8px 24px rgba(24, 24, 27, 0.12);
 
   color-scheme: light;
 }
@@ -70,19 +81,20 @@ body {
   color: var(--text);
   font-family: var(--bf);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* Visible keyboard focus for the custom button widgets. */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 /* Rich text injected from the tree data (e.g. <strong> inside a tip). */
 .rich strong {
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 @media (prefers-reduced-motion: reduce) {

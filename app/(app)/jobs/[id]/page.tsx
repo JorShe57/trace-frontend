@@ -7,7 +7,7 @@ import { getNode } from '@/lib/engine';
 import type { StoredSession } from '@/lib/db/sessions';
 import { deleteJob, updateJobStatus } from '../actions';
 
-export const metadata = { title: 'Job · T.R.A.C.E.' };
+export const metadata = { title: 'Job · TRACE' };
 
 export default async function JobDetailPage({
   params,
@@ -37,7 +37,7 @@ export default async function JobDetailPage({
   return (
     <div>
       <div className="mb-4">
-        <Link href="/jobs" className="font-mono text-[10px] text-text3 hover:text-accent">
+        <Link href="/jobs" className="text-[12.5px] text-text3 hover:text-accent">
           ← Jobs
         </Link>
       </div>
@@ -48,8 +48,8 @@ export default async function JobDetailPage({
             <Badge tone={job.status}>{job.status.replace('_', ' ')}</Badge>
             {job.priority !== 'normal' && <Badge tone={job.priority}>{job.priority}</Badge>}
           </div>
-          <h1 className="font-head text-[24px] font-bold tracking-[0.06em] text-text">{job.title}</h1>
-          <div className="mt-1 font-mono text-[10px] text-text3">
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-text">{job.title}</h1>
+          <div className="mt-1 text-[12.5px] text-text3">
             {[
               customer ? customer.name : null,
               job.scheduled_for ? `Scheduled ${new Date(job.scheduled_for).toLocaleString()}` : null,
@@ -94,7 +94,7 @@ export default async function JobDetailPage({
                   <li key={s.id} className="flex items-center justify-between gap-3 py-2.5">
                     <Link href={`/reports/${s.id}`} className="min-w-0 flex-1 hover:text-accent">
                       <span className="truncate text-[13px] text-text">{sessionTitle(s)}</span>
-                      <span className="block font-mono text-[9px] text-text3">
+                      <span className="block text-[12px] text-text3">
                         {new Date(s.created_at).toLocaleDateString()}
                       </span>
                     </Link>
@@ -125,7 +125,7 @@ export default async function JobDetailPage({
               </Button>
             </form>
             {job.completed_at && (
-              <p className="mt-2 font-mono text-[9px] text-text3">
+              <p className="mt-2 text-[12px] text-text3">
                 Completed {new Date(job.completed_at).toLocaleString()}
               </p>
             )}

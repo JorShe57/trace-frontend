@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { JOB_PRIORITIES, JOB_STATUSES, type Customer, type Equipment, type Site } from '@/lib/db/types';
 import { createJob } from '../actions';
 
-export const metadata = { title: 'New job · T.R.A.C.E.' };
+export const metadata = { title: 'New job · TRACE' };
 
 export default async function NewJobPage({
   searchParams,
@@ -27,7 +27,7 @@ export default async function NewJobPage({
   return (
     <div className="mx-auto max-w-[520px]">
       <div className="mb-4">
-        <Link href="/jobs" className="font-mono text-[10px] text-text3 hover:text-accent">
+        <Link href="/jobs" className="text-[12.5px] text-text3 hover:text-accent">
           ← Jobs
         </Link>
       </div>

@@ -202,7 +202,7 @@ function AiDiagnosticSession({ jobId }: { jobId?: string }) {
           </>
         )}
 
-        <p className="mt-5 text-center font-mono text-[9px] tracking-[0.06em] text-text3">
+        <p className="mt-5 text-center text-[12px] tracking-[0.06em] text-text3">
           AI-driven diagnosis · the model adapts each question to your answers
         </p>
       </main>
@@ -214,16 +214,16 @@ function ThinkingCard({ count }: { count: number }) {
   return (
     <section className="mb-4 overflow-hidden rounded-card border border-border bg-bg2">
       <div className="flex items-center gap-[7px] border-b border-border bg-white/[0.02] px-3.5 py-[7px]">
-        <span className="h-[14px] w-[3px] flex-shrink-0 rounded-[2px] bg-accent" />
-        <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-text3">
+        <span className="h-[14px] w-[3px] flex-shrink-0 rounded bg-accent" />
+        <span className="text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
           Reasoning
         </span>
-        <span className="ml-auto font-mono text-[8px] tracking-[0.06em] text-text3">
+        <span className="ml-auto text-[11px] tracking-[0.06em] text-text3">
           Step {count}
         </span>
       </div>
       <div className="px-4 pb-5 pt-[18px]">
-        <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.12em] text-text3">
+        <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
           Working out the next check…
         </div>
         <div className="h-2.5 animate-pulse rounded bg-border2" />
@@ -238,14 +238,14 @@ function ErrorCard({ message, onRetry }: { message: string; onRetry: () => void 
   return (
     <section className="mb-4 overflow-hidden rounded-card border border-danger/40 bg-bg2">
       <div className="px-4 py-5">
-        <h2 className="mb-1.5 font-head text-[15px] font-semibold text-danger">
+        <h2 className="mb-1.5 text-[15px] font-semibold text-danger">
           Couldn&rsquo;t get the next step
         </h2>
         <p className="mb-4 text-[12px] leading-[1.55] text-text2">{message}</p>
         <button
           type="button"
           onClick={onRetry}
-          className="rounded-[3px] border border-accent bg-[var(--accent-dim)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent"
+          className="rounded-md border border-accent bg-[var(--accent-dim)] px-3 py-1.5 text-[12.5px] font-medium text-accent"
         >
           Retry
         </button>

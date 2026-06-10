@@ -1,7 +1,7 @@
 import { AskTraceChat } from '@/components/AskTraceChat';
 import { PageHeading } from '@/components/ui';
 
-export const metadata = { title: 'Ask Trace · T.R.A.C.E.' };
+export const metadata = { title: 'Ask Trace · TRACE' };
 
 export default async function AskPage({
   searchParams,

@@ -41,7 +41,7 @@ export function EquipmentInfo({ unitName, step, onSubmit }: EquipmentInfoProps) 
       <PhaseBar phase="Equipment Details" pip="grey" step={step} />
 
       <div className="px-4 pb-4 pt-[18px]">
-        <h1 className="mb-1.5 font-head text-[20px] font-semibold leading-[1.3] tracking-[0.03em] text-text">
+        <h1 className="mb-1.5 text-[19px] font-semibold leading-[1.35] tracking-[-0.01em] text-text">
           What unit are you on?
         </h1>
         <p className="mb-4 text-[12px] leading-[1.55] text-text2">
@@ -83,21 +83,21 @@ export function EquipmentInfo({ unitName, step, onSubmit }: EquipmentInfoProps) 
           value={model}
           onChange={(e) => setModel(e.target.value)}
           placeholder="e.g. 25HBC060A003"
-          className="mb-4 w-full rounded-[5px] border border-border2 bg-bg3 px-3 py-2 font-mono text-[13px] text-text placeholder:text-text3 focus:border-accent focus:outline-none"
+          className="mb-4 w-full rounded-[5px] border border-border2 bg-bg3 px-3 py-2 text-[13.5px] text-text placeholder:text-text3 focus:border-accent focus:outline-none"
         />
 
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => onSubmit(build())}
-            className="flex-1 rounded-[5px] border border-accent bg-[var(--accent-dim)] py-3 text-center font-head text-[14px] font-bold tracking-[0.06em] text-accent transition-colors hover:bg-[var(--accent-faint)]"
+            className="flex-1 rounded-[5px] border border-accent bg-[var(--accent-dim)] py-3 text-center text-[14px] font-semibold text-accent transition-colors hover:bg-[var(--accent-faint)]"
           >
             Continue
           </button>
           <button
             type="button"
             onClick={() => onSubmit({})}
-            className="rounded-[5px] border border-border2 bg-bg3 px-4 py-3 text-center font-mono text-[10px] uppercase tracking-[0.08em] text-text3 transition-colors hover:border-border hover:text-text2"
+            className="rounded-[5px] border border-border2 bg-bg3 px-4 py-3 text-center text-[12.5px] font-medium text-text3 transition-colors hover:border-border hover:text-text2"
           >
             Skip
           </button>
@@ -109,7 +109,7 @@ export function EquipmentInfo({ unitName, step, onSubmit }: EquipmentInfoProps) 
 
 function FieldLabel({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`mb-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-text3 ${className}`}>
+    <div className={`mb-1.5 text-[11px] font-medium uppercase tracking-[0.05em] text-text3 ${className}`}>
       {children}
     </div>
   );

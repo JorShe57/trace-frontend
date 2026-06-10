@@ -95,7 +95,7 @@ export function EpaQuiz() {
     return (
       <div className="space-y-4">
         <Card className="p-5 text-center">
-          <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-text3">
+          <div className="text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
             Your score
           </div>
           <div className="mt-1 font-mono text-[40px] font-bold tabular-nums text-accent">
@@ -105,7 +105,7 @@ export function EpaQuiz() {
             {score} of {total} correct
           </div>
           <div
-            className={`mt-3 inline-block rounded-[3px] border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.1em] ${
+            className={`mt-3 inline-block rounded-md border px-3 py-1 text-[11px] font-medium uppercase tracking-[0.05em] ${
               passed
                 ? 'border-accent/40 bg-[var(--accent-dim)] text-accent'
                 : 'border-yellow/30 bg-[var(--yellow-bg)] text-warn'
@@ -117,14 +117,14 @@ export function EpaQuiz() {
             <button
               type="button"
               onClick={() => start(deck)}
-              className="rounded-[4px] border border-accent bg-[var(--accent-dim)] px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-accent transition-colors hover:bg-[var(--accent-faint)]"
+              className="rounded-lg border border-accent bg-[var(--accent-dim)] px-3.5 py-2 text-[13px] font-medium text-accent transition-colors hover:bg-[var(--accent-faint)]"
             >
               Retake quiz
             </button>
           </div>
         </Card>
 
-        <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-text3">Review</div>
+        <div className="text-[11px] font-medium uppercase tracking-[0.05em] text-text3">Review</div>
         <div className="space-y-2">
           {run.map((q, i) => {
             const yours = responses[i];
@@ -132,11 +132,11 @@ export function EpaQuiz() {
             return (
               <Card key={i} className="p-4">
                 <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded-[3px] border border-border2 bg-bg3 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-text2">
+                  <span className="rounded-md border border-border2 bg-bg3 px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] text-text2">
                     {sectionLabel(q.section)}
                   </span>
                   <span
-                    className={`font-mono text-[8px] uppercase tracking-[0.12em] ${
+                    className={`text-[11px] font-medium uppercase tracking-[0.05em] ${
                       correct ? 'text-accent' : 'text-danger'
                     }`}
                   >
@@ -174,7 +174,7 @@ export function EpaQuiz() {
               key={d.id}
               type="button"
               onClick={() => selectDeck(d.id)}
-              className={`rounded-[3px] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] transition-colors ${
+              className={`rounded-md px-2.5 py-1.5 text-[12.5px] font-medium transition-colors ${
                 active
                   ? 'border border-accent/40 bg-[var(--accent-dim)] text-accent'
                   : 'border border-border2 text-text3 hover:text-text2'
@@ -187,7 +187,7 @@ export function EpaQuiz() {
       </div>
 
       {/* Progress */}
-      <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.1em] text-text3">
+      <div className="flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
         <span>
           Question {total === 0 ? 0 : index + 1} / {total}
         </span>
@@ -204,7 +204,7 @@ export function EpaQuiz() {
         <>
           <Card className="p-5">
             <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-[3px] border border-border2 bg-bg3 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-text2">
+              <span className="rounded-md border border-border2 bg-bg3 px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] text-text2">
                 {sectionLabel(current.section)}
               </span>
             </div>
@@ -229,12 +229,12 @@ export function EpaQuiz() {
                     type="button"
                     onClick={() => choose(option)}
                     disabled={answered}
-                    className={`flex w-full items-center justify-between gap-3 rounded-[4px] border px-3.5 py-2.5 text-left text-[13px] transition-colors disabled:cursor-default ${tone}`}
+                    className={`flex w-full items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 text-left text-[13px] transition-colors disabled:cursor-default ${tone}`}
                   >
                     <span>{option}</span>
-                    {answered && isCorrect && <span className="font-mono text-[11px]">✓</span>}
+                    {answered && isCorrect && <span className="text-[13px]">✓</span>}
                     {answered && isChosen && !isCorrect && (
-                      <span className="font-mono text-[11px]">✗</span>
+                      <span className="text-[13px]">✗</span>
                     )}
                   </button>
                 );
@@ -242,9 +242,9 @@ export function EpaQuiz() {
             </div>
 
             {answered && (
-              <div className="mt-4 rounded-[4px] border border-border2 bg-bg3 px-3.5 py-3">
+              <div className="mt-4 rounded-lg border border-border2 bg-bg3 px-3.5 py-3">
                 <div
-                  className={`font-mono text-[9px] uppercase tracking-[0.12em] ${
+                  className={`text-[11px] font-medium uppercase tracking-[0.05em] ${
                     selected === current.answer ? 'text-accent' : 'text-danger'
                   }`}
                 >
@@ -259,7 +259,7 @@ export function EpaQuiz() {
             type="button"
             onClick={next}
             disabled={!answered}
-            className="w-full rounded-[4px] border border-accent bg-[var(--accent-dim)] px-3.5 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-accent transition-colors hover:bg-[var(--accent-faint)] disabled:opacity-50"
+            className="w-full rounded-lg border border-accent bg-[var(--accent-dim)] px-3.5 py-2.5 text-[13px] font-medium text-accent transition-colors hover:bg-[var(--accent-faint)] disabled:opacity-50"
           >
             {index + 1 >= total ? 'Finish & see score' : 'Next question →'}
           </button>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button, Card, ErrorBanner, Field, Input, PageHeading, Textarea } from '@/components/ui';
 import { createCustomer } from '../actions';
 
-export const metadata = { title: 'New customer · T.R.A.C.E.' };
+export const metadata = { title: 'New customer · TRACE' };
 
 export default async function NewCustomerPage({
   searchParams,
@@ -14,7 +14,7 @@ export default async function NewCustomerPage({
   return (
     <div className="mx-auto max-w-[520px]">
       <div className="mb-4">
-        <Link href="/customers" className="font-mono text-[10px] text-text3 hover:text-accent">
+        <Link href="/customers" className="text-[12.5px] text-text3 hover:text-accent">
           ← Customers
         </Link>
       </div>

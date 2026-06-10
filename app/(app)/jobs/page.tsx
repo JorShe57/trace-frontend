@@ -3,7 +3,7 @@ import { Badge, ButtonLink, Card, EmptyState, PageHeading } from '@/components/u
 import { createClient } from '@/lib/supabase/server';
 import { JOB_STATUSES, type Job } from '@/lib/db/types';
 
-export const metadata = { title: 'Jobs · T.R.A.C.E.' };
+export const metadata = { title: 'Jobs · TRACE' };
 
 const OPEN_STATUSES = ['open', 'in_progress', 'on_hold'];
 
@@ -39,7 +39,7 @@ export default async function JobsPage({
           <Link
             key={f.value}
             href={f.value === 'all' ? '/jobs' : `/jobs?status=${f.value}`}
-            className={`rounded-[3px] border px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.08em] transition-colors ${
+            className={`rounded-md border px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.05em] transition-colors ${
               active === f.value
                 ? 'border-accent/40 bg-[var(--accent-dim)] text-accent'
                 : 'border-border2 text-text3 hover:text-text2'
@@ -71,7 +71,7 @@ export default async function JobsPage({
                     <Badge tone={job.priority}>{job.priority}</Badge>
                   )}
                 </div>
-                <div className="mt-0.5 font-mono text-[9px] text-text3">
+                <div className="mt-0.5 text-[12px] text-text3">
                   {job.scheduled_for
                     ? `Scheduled ${new Date(job.scheduled_for).toLocaleString()}`
                     : `Created ${new Date(job.created_at).toLocaleDateString()}`}

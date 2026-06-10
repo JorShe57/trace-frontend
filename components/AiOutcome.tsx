@@ -104,22 +104,22 @@ export function AiOutcome({
         </span>
         <div className="min-w-0 flex-1">
           <h1
-            className={`font-head text-[18px] font-bold tracking-[0.06em] ${
+            className={`text-[16px] font-semibold tracking-[-0.01em] ${
               danger ? 'text-danger' : 'text-accent'
             }`}
           >
             {step.title}
           </h1>
-          <div className="mt-px font-mono text-[9px] text-text2">
+          <div className="mt-px text-[12px] text-text2">
             {[step.phase, unitName].filter(Boolean).join(' · ')}
           </div>
         </div>
         {source === 'claude' ? (
-          <span className="rounded-[3px] border border-accent/30 bg-[var(--accent-faint)] px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-accent">
+          <span className="rounded-md border border-accent/30 bg-[var(--accent-faint)] px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] text-accent">
             AI diagnosed
           </span>
         ) : (
-          <span className="rounded-[3px] border border-warn/30 bg-[var(--yellow-bg)] px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-warn">
+          <span className="rounded-md border border-warn/30 bg-[var(--yellow-bg)] px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] text-warn">
             Fallback
           </span>
         )}
@@ -127,7 +127,7 @@ export function AiOutcome({
 
       <div className="p-4">
         {step.safety && (
-          <div className="mb-2.5 flex items-start gap-2 rounded-[4px] border border-danger/30 bg-[var(--red-bg)] px-3 py-[9px] text-[12px] leading-[1.5] text-danger">
+          <div className="mb-2.5 flex items-start gap-2 rounded-lg border border-danger/30 bg-[var(--red-bg)] px-3 py-[9px] text-[12px] leading-[1.5] text-danger">
             <span className="flex-shrink-0" aria-hidden="true">
               ⚠
             </span>
@@ -136,8 +136,8 @@ export function AiOutcome({
         )}
 
         {(step.rationale || step.watchouts.length > 0) && (
-          <div className="mb-3.5 rounded-[4px] border border-accent/20 bg-[var(--accent-faint)] px-3 py-3">
-            <div className="mb-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-accent">
+          <div className="mb-3.5 rounded-lg border border-accent/20 bg-[var(--accent-faint)] px-3 py-3">
+            <div className="mb-1.5 text-[11px] font-medium uppercase tracking-[0.05em] text-accent">
               Reasoning · {step.confidence} confidence
             </div>
             {step.rationale && (
@@ -170,9 +170,9 @@ export function AiOutcome({
                 {step.steps.map((s, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-2 rounded-[4px] border border-border2 bg-bg3 px-3 py-[9px] text-[12px] leading-[1.5] text-text"
+                    className="flex items-start gap-2 rounded-lg border border-border2 bg-bg3 px-3 py-[9px] text-[12px] leading-[1.5] text-text"
                   >
-                    <span className="mt-px flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full border border-accent/30 bg-[var(--accent-dim)] font-mono text-[9px] text-accent">
+                    <span className="mt-px flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full border border-accent/30 bg-[var(--accent-dim)] text-[12px] text-accent">
                       {i + 1}
                     </span>
                     <span>{s}</span>
@@ -187,7 +187,7 @@ export function AiOutcome({
           <>
             <Divider />
             <Section label="Tools needed">
-              <p className="font-mono text-[12px] leading-[1.6] text-accent">
+              <p className="text-[13px] leading-[1.6] text-accent">
                 {step.tools.join(' · ')}
               </p>
             </Section>
@@ -199,29 +199,29 @@ export function AiOutcome({
         <button
           type="button"
           onClick={onBack}
-          className="rounded-[3px] border border-border2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-text3 transition-colors hover:border-border hover:text-text2"
+          className="rounded-md border border-border2 px-3 py-1.5 text-[12.5px] font-medium text-text3 transition-colors hover:border-border hover:text-text2"
         >
           ← Back
         </button>
         <button
           type="button"
           onClick={onRestart}
-          className="rounded-[3px] border border-accent bg-[var(--accent-dim)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent transition-colors hover:bg-[var(--accent-dim)]"
+          className="rounded-md border border-accent bg-[var(--accent-dim)] px-3 py-1.5 text-[12.5px] font-medium text-accent transition-colors hover:bg-[var(--accent-dim)]"
         >
           ↺ Restart
         </button>
         <div className="ml-auto flex items-center gap-2">
           {savedId && (
-            <Link href={`/reports/${savedId}`} className="font-mono text-[9px] text-accent hover:underline">
+            <Link href={`/reports/${savedId}`} className="text-[12px] text-accent hover:underline">
               Saved · View report →
             </Link>
           )}
-          {saveError && <span className="font-mono text-[9px] text-danger">{saveError}</span>}
+          {saveError && <span className="text-[12px] text-danger">{saveError}</span>}
           <button
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="rounded-[3px] border border-border2 bg-bg2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+            className="rounded-md border border-border2 bg-bg2 px-3 py-1.5 text-[12.5px] font-medium text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
           >
             {saving ? 'Saving…' : 'Save report'}
           </button>
@@ -234,7 +234,7 @@ export function AiOutcome({
 function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="mb-3.5 last:mb-0">
-      <div className="mb-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-text3">
+      <div className="mb-1.5 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
         {label}
       </div>
       {children}

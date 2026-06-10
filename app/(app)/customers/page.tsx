@@ -3,7 +3,7 @@ import { ButtonLink, Card, EmptyState, PageHeading } from '@/components/ui';
 import { createClient } from '@/lib/supabase/server';
 import type { Customer } from '@/lib/db/types';
 
-export const metadata = { title: 'Customers · T.R.A.C.E.' };
+export const metadata = { title: 'Customers · TRACE' };
 
 export default async function CustomersPage() {
   const supabase = await createClient();
@@ -37,11 +37,11 @@ export default async function CustomersPage() {
             >
               <div className="min-w-0 flex-1">
                 <div className="truncate text-[13px] text-text">{c.name}</div>
-                <div className="mt-0.5 font-mono text-[9px] text-text3">
+                <div className="mt-0.5 text-[12px] text-text3">
                   {[c.contact_name, c.phone, c.email].filter(Boolean).join(' · ') || 'No contact info'}
                 </div>
               </div>
-              <span className="font-mono text-[12px] text-text3">→</span>
+              <span className="text-[13px] text-text3">→</span>
             </Link>
           ))}
         </Card>

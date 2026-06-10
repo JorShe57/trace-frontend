@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Card, PageHeading } from '@/components/ui';
 
-export const metadata = { title: 'Tools · T.R.A.C.E.' };
+export const metadata = { title: 'Tools · TRACE' };
 
 /** Field tools and calculators techs reach for on the job. */
 const TOOLS = [
@@ -39,9 +39,9 @@ export default function ToolsPage() {
           >
             <div className="min-w-0 flex-1">
               <div className="truncate text-[13px] text-text">{tool.name}</div>
-              <div className="mt-0.5 font-mono text-[9px] text-text3">{tool.blurb}</div>
+              <div className="mt-0.5 text-[12px] text-text3">{tool.blurb}</div>
             </div>
-            <span className="font-mono text-[12px] text-text3">→</span>
+            <span className="text-[13px] text-text3">→</span>
           </Link>
         ))}
       </Card>
