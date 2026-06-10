@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ComponentProps, ReactNode } from 'react';
 
-/* A small set of presentational primitives sharing the T.R.A.C.E. design
+/* A small set of presentational primitives sharing the TRACE design
    tokens (defined in globals.css). Server-component friendly — no client
    hooks here. */
 
@@ -13,13 +13,15 @@ export function Card({
   className?: string;
 }) {
   return (
-    <div className={`rounded-card border border-border2 bg-bg2 ${className}`}>{children}</div>
+    <div className={`rounded-card border border-border bg-bg2 shadow-card ${className}`}>
+      {children}
+    </div>
   );
 }
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <div className="mb-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-text3">
+    <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
       {children}
     </div>
   );
@@ -37,8 +39,8 @@ export function PageHeading({
   return (
     <div className="mb-6 flex items-end justify-between gap-4">
       <div>
-        <h1 className="font-head text-[24px] font-bold tracking-[0.06em] text-text">{title}</h1>
-        {subtitle && <p className="mt-0.5 text-[12px] text-text2">{subtitle}</p>}
+        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-text">{title}</h1>
+        {subtitle && <p className="mt-1 text-[13px] text-text2">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -48,12 +50,12 @@ export function PageHeading({
 type ButtonVariant = 'primary' | 'ghost' | 'danger';
 
 const buttonBase =
-  'inline-flex items-center justify-center gap-1.5 rounded-[4px] px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
 
 const buttonVariants: Record<ButtonVariant, string> = {
-  primary: 'border border-accent bg-[var(--accent-dim)] text-accent hover:bg-[var(--accent-faint)]',
-  ghost: 'border border-border2 bg-bg2 text-text2 hover:border-accent hover:text-accent',
-  danger: 'border border-danger/40 bg-[var(--red-bg)] text-danger hover:border-danger',
+  primary: 'bg-accent text-[var(--accent-contrast)] hover:bg-accent2',
+  ghost: 'border border-border2 bg-bg2 text-text2 hover:bg-bg3 hover:text-text',
+  danger: 'border border-danger/30 bg-[var(--red-bg)] text-danger hover:border-danger',
 };
 
 export function Button({
@@ -85,17 +87,15 @@ export function Field({
 }) {
   return (
     <label className="block" htmlFor={name}>
-      <span className="mb-1 block font-mono text-[9px] uppercase tracking-[0.1em] text-text3">
-        {label}
-      </span>
+      <span className="mb-1.5 block text-[12px] font-medium text-text2">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-[10px] text-text3">{hint}</span>}
+      {hint && <span className="mt-1.5 block text-[12px] text-text3">{hint}</span>}
     </label>
   );
 }
 
 const controlClass =
-  'w-full rounded-[4px] border border-border2 bg-bg3 px-3 py-2 text-[13px] text-text placeholder:text-text3 focus:border-accent focus:outline-none';
+  'w-full rounded-lg border border-border2 bg-bg3 px-3 py-2 text-[13.5px] text-text placeholder:text-text3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-[var(--accent-dim)]';
 
 export function Input(props: ComponentProps<'input'>) {
   return <input {...props} className={`${controlClass} ${props.className ?? ''}`} />;
@@ -120,8 +120,8 @@ export function EmptyState({
 }) {
   return (
     <Card className="px-5 py-12 text-center">
-      <p className="text-[13px] text-text2">{title}</p>
-      {hint && <p className="mx-auto mt-1 max-w-[360px] text-[11px] text-text3">{hint}</p>}
+      <p className="text-[14px] font-medium text-text2">{title}</p>
+      {hint && <p className="mx-auto mt-1.5 max-w-[360px] text-[12.5px] text-text3">{hint}</p>}
       {action && <div className="mt-4 flex justify-center">{action}</div>}
     </Card>
   );
@@ -141,7 +141,7 @@ export function Badge({ tone, children }: { tone?: string; children: ReactNode }
   const cls = (tone && statusTone[tone]) || 'border-border2 bg-bg3 text-text2';
   return (
     <span
-      className={`inline-block rounded-[3px] border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] ${cls}`}
+      className={`inline-block rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${cls}`}
     >
       {children}
     </span>
@@ -151,7 +151,7 @@ export function Badge({ tone, children }: { tone?: string; children: ReactNode }
 export function ErrorBanner({ message }: { message?: string | null }) {
   if (!message) return null;
   return (
-    <div className="mb-3 rounded-[4px] border border-danger/30 bg-[var(--red-bg)] px-3 py-2 text-[12px] text-danger">
+    <div className="mb-3 rounded-lg border border-danger/30 bg-[var(--red-bg)] px-3.5 py-2.5 text-[13px] text-danger">
       {message}
     </div>
   );

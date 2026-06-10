@@ -34,7 +34,11 @@ const config: Config = {
         body: 'var(--bf)',
       },
       borderRadius: {
-        card: '8px',
+        card: '12px',
+      },
+      boxShadow: {
+        card: 'var(--shadow-card)',
+        pop: 'var(--shadow-pop)',
       },
       maxWidth: {
         shell: '680px',

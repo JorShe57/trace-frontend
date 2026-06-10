@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { PageHeading } from '@/components/ui';
 import { RefrigerantCalculator } from '@/components/RefrigerantCalculator';
 
-export const metadata = { title: 'Refrigerant Calculator · T.R.A.C.E.' };
+export const metadata = { title: 'Refrigerant Calculator · TRACE' };
 
 export default function RefrigerantCalculatorPage() {
   return (
@@ -13,7 +13,7 @@ export default function RefrigerantCalculatorPage() {
         action={
           <Link
             href="/tools"
-            className="font-mono text-[10px] uppercase tracking-[0.08em] text-text3 hover:text-text2"
+            className="text-[12.5px] font-medium text-text3 hover:text-text2"
           >
             ← Tools
           </Link>

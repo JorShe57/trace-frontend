@@ -114,7 +114,7 @@ export function EpaFlashcards() {
               key={d.id}
               type="button"
               onClick={() => selectDeck(d.id)}
-              className={`rounded-[3px] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] transition-colors ${
+              className={`rounded-md px-2.5 py-1.5 text-[12.5px] font-medium transition-colors ${
                 active
                   ? 'border border-accent/40 bg-[var(--accent-dim)] text-accent'
                   : 'border border-border2 text-text3 hover:text-text2'
@@ -127,7 +127,7 @@ export function EpaFlashcards() {
       </div>
 
       {/* Progress */}
-      <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.1em] text-text3">
+      <div className="flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
         <span>
           Card {total === 0 ? 0 : index + 1} / {total}
         </span>
@@ -152,14 +152,14 @@ export function EpaFlashcards() {
         >
           <Card className="flex min-h-[220px] flex-col p-5 transition-colors hover:border-accent/40">
             <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-[3px] border border-border2 bg-bg3 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-text2">
+              <span className="rounded-md border border-border2 bg-bg3 px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] text-text2">
                 {sectionLabel(card.section)}
               </span>
-              <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-text3">
+              <span className="text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
                 {flipped ? 'Answer' : 'Question'}
               </span>
               {known.has(card.q) && (
-                <span className="rounded-[3px] border border-accent/30 bg-[var(--accent-faint)] px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-accent">
+                <span className="rounded-md border border-accent/30 bg-[var(--accent-faint)] px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] text-accent">
                   Known
                 </span>
               )}
@@ -175,7 +175,7 @@ export function EpaFlashcards() {
                 {flipped ? card.a : card.q}
               </p>
             </div>
-            <div className="mt-4 font-mono text-[9px] uppercase tracking-[0.1em] text-text3">
+            <div className="mt-4 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
               {flipped ? 'Tap to see question' : 'Tap to reveal answer'}
             </div>
           </Card>
@@ -192,7 +192,7 @@ export function EpaFlashcards() {
           type="button"
           onClick={() => step(-1)}
           disabled={total === 0}
-          className="rounded-[4px] border border-border2 bg-bg2 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+          className="rounded-lg border border-border2 bg-bg2 px-3 py-2 text-[13px] font-medium text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
         >
           ← Prev
         </button>
@@ -200,7 +200,7 @@ export function EpaFlashcards() {
           type="button"
           onClick={toggleKnown}
           disabled={total === 0}
-          className="rounded-[4px] border border-accent bg-[var(--accent-dim)] px-3 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-accent transition-colors hover:bg-[var(--accent-faint)] disabled:opacity-50"
+          className="rounded-lg border border-accent bg-[var(--accent-dim)] px-3 py-2 text-[13px] font-medium text-accent transition-colors hover:bg-[var(--accent-faint)] disabled:opacity-50"
         >
           {card && known.has(card.q) ? 'Unmark' : 'Got it'}
         </button>
@@ -208,14 +208,14 @@ export function EpaFlashcards() {
           type="button"
           onClick={() => step(1)}
           disabled={total === 0}
-          className="rounded-[4px] border border-border2 bg-bg2 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+          className="rounded-lg border border-border2 bg-bg2 px-3 py-2 text-[13px] font-medium text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
         >
           Next →
         </button>
         <button
           type="button"
           onClick={() => loadDeck(deck, { shuffle: true })}
-          className="rounded-[4px] border border-border2 bg-bg2 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text2 transition-colors hover:border-accent hover:text-accent"
+          className="rounded-lg border border-border2 bg-bg2 px-3 py-2 text-[13px] font-medium text-text2 transition-colors hover:border-accent hover:text-accent"
         >
           ⟳ Shuffle
         </button>
@@ -227,14 +227,14 @@ export function EpaFlashcards() {
           <button
             type="button"
             onClick={() => loadDeck(deck, { shuffle: true })}
-            className="mx-auto mt-3 rounded-[4px] border border-accent bg-[var(--accent-dim)] px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-accent transition-colors hover:bg-[var(--accent-faint)]"
+            className="mx-auto mt-3 rounded-lg border border-accent bg-[var(--accent-dim)] px-3.5 py-2 text-[13px] font-medium text-accent transition-colors hover:bg-[var(--accent-faint)]"
           >
             Restart & shuffle
           </button>
         </Card>
       )}
 
-      <p className="px-1 font-mono text-[9px] uppercase tracking-[0.08em] text-text3">
+      <p className="px-1 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
         Shortcuts: ← / → step · Space flips · K marks known
       </p>
     </div>

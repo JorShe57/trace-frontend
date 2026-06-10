@@ -6,7 +6,7 @@ import { getNode } from '@/lib/engine';
 import type { Job } from '@/lib/db/types';
 import type { StoredSession } from '@/lib/db/sessions';
 
-export const metadata = { title: 'Dashboard · T.R.A.C.E.' };
+export const metadata = { title: 'Dashboard · TRACE' };
 
 const OPEN_STATUSES = ['open', 'in_progress', 'on_hold'];
 
@@ -30,8 +30,8 @@ function Kpi({ label, value, href }: { label: string; value: number | string; hr
       href={href}
       className="rounded-card border border-border2 bg-bg2 px-4 py-4 transition-colors hover:border-accent"
     >
-      <div className="font-head text-[30px] font-bold leading-none text-text">{value}</div>
-      <div className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-text3">{label}</div>
+      <div className="text-[28px] font-semibold tracking-[-0.02em] leading-none text-text">{value}</div>
+      <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">{label}</div>
     </Link>
   );
 }
@@ -82,7 +82,7 @@ export default async function DashboardPage() {
       <section className="mb-7">
         <div className="mb-2 flex items-center justify-between">
           <SectionLabel>Ask Trace</SectionLabel>
-          <Link href="/ask" className="font-mono text-[9px] text-text3 hover:text-accent">
+          <Link href="/ask" className="text-[12px] text-text3 hover:text-accent">
             Open full view →
           </Link>
         </div>
@@ -93,7 +93,7 @@ export default async function DashboardPage() {
         <section>
           <div className="mb-2 flex items-center justify-between">
             <SectionLabel>Open jobs</SectionLabel>
-            <Link href="/jobs" className="font-mono text-[9px] text-text3 hover:text-accent">
+            <Link href="/jobs" className="text-[12px] text-text3 hover:text-accent">
               View all →
             </Link>
           </div>
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
                 >
                   <Link href={`/jobs/${job.id}`} className="min-w-0 flex-1">
                     <div className="truncate text-[13px] text-text">{job.title}</div>
-                    <div className="font-mono text-[9px] text-text3">
+                    <div className="text-[12px] text-text3">
                       {job.scheduled_for
                         ? `Scheduled ${new Date(job.scheduled_for).toLocaleDateString()}`
                         : `Created ${new Date(job.created_at).toLocaleDateString()}`}
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
         <section>
           <div className="mb-2 flex items-center justify-between">
             <SectionLabel>Saved reports</SectionLabel>
-            <Link href="/reports" className="font-mono text-[9px] text-text3 hover:text-accent">
+            <Link href="/reports" className="text-[12px] text-text3 hover:text-accent">
               View all →
             </Link>
           </div>
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
                 >
                   <Link href={`/reports/${s.id}`} className="min-w-0 flex-1">
                     <div className="truncate text-[13px] text-text">{outcomeTitle(s)}</div>
-                    <div className="font-mono text-[9px] text-text3">
+                    <div className="text-[12px] text-text3">
                       {new Date(s.created_at).toLocaleDateString()}
                     </div>
                   </Link>

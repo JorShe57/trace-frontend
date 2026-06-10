@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { AppNav } from '@/components/AppNav';
-import { LogoMark } from '@/components/Logo';
+import { LogoMark, WordMark } from '@/components/Logo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui';
 import { createClient } from '@/lib/supabase/server';
@@ -30,30 +30,26 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-[100] flex h-[52px] items-center gap-4 border-b border-border bg-bg2 px-5">
-        <Link href="/dashboard" className="flex items-center gap-2" title="Dashboard">
+      <header className="sticky top-0 z-[100] flex h-[56px] items-center gap-4 border-b border-border bg-bg2/90 px-5 backdrop-blur">
+        <Link href="/dashboard" className="flex items-center gap-2.5" title="Dashboard">
           <LogoMark />
-          <span className="font-head text-[15px] font-bold tracking-[0.18em] text-text">
-            T<span className="text-accent">.</span>R<span className="text-accent">.</span>A
-            <span className="text-accent">.</span>C<span className="text-accent">.</span>E
-            <span className="text-accent">.</span>
-          </span>
+          <WordMark />
         </Link>
 
         <div className="ml-2 hidden sm:block">
           <AppNav />
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2.5">
           <Link
             href="/diagnostic/ai"
-            className="hidden rounded-[3px] border border-accent bg-[var(--accent-dim)] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent transition-colors hover:bg-[var(--accent-faint)] sm:inline-block"
+            className="hidden rounded-lg bg-accent px-3 py-1.5 text-[13px] font-medium text-[var(--accent-contrast)] transition-colors hover:bg-accent2 sm:inline-block"
           >
             + New diagnostic
           </Link>
           <Link
             href="/account"
-            className="max-w-[140px] truncate font-mono text-[10px] text-text2 hover:text-accent"
+            className="max-w-[140px] truncate text-[12.5px] text-text2 hover:text-text"
             title={displayName}
           >
             {displayName}

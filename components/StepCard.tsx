@@ -20,7 +20,7 @@ export function StepCard({ node, step, onAnswer }: StepCardProps) {
       <PhaseBar phase={node.phase} pip={node.phasePip} step={step} />
 
       <div className="px-4 pb-3.5 pt-[18px]">
-        <h1 className="mb-1.5 font-head text-[20px] font-semibold leading-[1.3] tracking-[0.03em] text-text">
+        <h1 className="mb-1.5 text-[19px] font-semibold leading-[1.35] tracking-[-0.01em] text-text">
           {node.question}
         </h1>
         {node.context && (
@@ -50,7 +50,7 @@ function YesNo({ node, onAnswer }: { node: YesNoNode; onAnswer: (id: string) => 
         type="button"
         data-answer="yes"
         onClick={() => onAnswer(node.yes)}
-        className="rounded-[5px] border border-border2 bg-bg3 py-3.5 text-center font-head text-[18px] font-bold tracking-[0.06em] text-accent transition-colors hover:border-accent hover:bg-[var(--accent-dim)]"
+        className="rounded-[5px] border border-border2 bg-bg3 py-3.5 text-center text-[16px] font-semibold tracking-[-0.01em] text-accent transition-colors hover:border-accent hover:bg-[var(--accent-dim)]"
       >
         Yes
       </button>
@@ -58,7 +58,7 @@ function YesNo({ node, onAnswer }: { node: YesNoNode; onAnswer: (id: string) => 
         type="button"
         data-answer="no"
         onClick={() => onAnswer(node.no)}
-        className="rounded-[5px] border border-border2 bg-bg3 py-3.5 text-center font-head text-[18px] font-bold tracking-[0.06em] text-danger transition-colors hover:border-danger hover:bg-[var(--red-bg)]"
+        className="rounded-[5px] border border-border2 bg-bg3 py-3.5 text-center text-[16px] font-semibold tracking-[-0.01em] text-danger transition-colors hover:border-danger hover:bg-[var(--red-bg)]"
       >
         No
       </button>
@@ -88,7 +88,7 @@ function ChoiceList({ node, onAnswer }: { node: ChoiceNode; onAnswer: (id: strin
         >
           <span className="flex-1">
             {a.label}
-            {a.sub && <span className="mt-0.5 block text-[10px] text-text3">{a.sub}</span>}
+            {a.sub && <span className="mt-0.5 block text-[12px] text-text3">{a.sub}</span>}
           </span>
         </button>
       ))}

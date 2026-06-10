@@ -5,7 +5,7 @@ import { Button, Card, ErrorBanner, Field, Input } from '@/components/ui';
 import { getCurrentUser } from '@/lib/supabase/server';
 import { signIn } from './actions';
 
-export const metadata = { title: 'Sign in · T.R.A.C.E.' };
+export const metadata = { title: 'Sign in · TRACE' };
 
 export default async function LoginPage({
   searchParams,
@@ -20,11 +20,11 @@ export default async function LoginPage({
   return (
     <AuthShell tagline="Field Diagnostics &amp; Project Tracker">
       <Card className="px-5 py-6">
-        <h1 className="mb-1 font-head text-[18px] font-bold tracking-[0.06em] text-text">Sign in</h1>
+        <h1 className="mb-1 text-[16px] font-semibold tracking-[-0.01em] text-text">Sign in</h1>
         <p className="mb-4 text-[12px] text-text2">Access your reports, customers and jobs.</p>
 
         {notice && (
-          <div className="mb-3 rounded-[4px] border border-accent/30 bg-[var(--accent-faint)] px-3 py-2 text-[12px] text-accent">
+          <div className="mb-3 rounded-lg border border-accent/30 bg-[var(--accent-faint)] px-3 py-2 text-[12px] text-accent">
             {notice}
           </div>
         )}

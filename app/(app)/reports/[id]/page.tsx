@@ -6,7 +6,7 @@ import { getUserSession } from '@/lib/db/sessions';
 import { buildHistory, getNode, selectedUnit } from '@/lib/engine';
 import { deleteReport } from '../actions';
 
-export const metadata = { title: 'Report · T.R.A.C.E.' };
+export const metadata = { title: 'Report · TRACE' };
 
 export default async function ReportDetailPage({
   params,
@@ -34,15 +34,15 @@ export default async function ReportDetailPage({
   return (
     <div>
       <div className="mb-4">
-        <Link href="/reports" className="font-mono text-[10px] text-text3 hover:text-accent">
+        <Link href="/reports" className="text-[12.5px] text-text3 hover:text-accent">
           ← All reports
         </Link>
       </div>
 
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-head text-[24px] font-bold tracking-[0.06em] text-text">{title}</h1>
-          <div className="mt-1 font-mono text-[10px] text-text3">
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-text">{title}</h1>
+          <div className="mt-1 text-[12.5px] text-text3">
             {[unit?.name, new Date(session.created_at).toLocaleString()].filter(Boolean).join(' · ')}
           </div>
         </div>
@@ -90,9 +90,9 @@ export default async function ReportDetailPage({
                 {steps.map((s, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-2 rounded-[4px] border border-border2 bg-bg3 px-3 py-[9px] text-[12px] leading-[1.5] text-text"
+                    className="flex items-start gap-2 rounded-lg border border-border2 bg-bg3 px-3 py-[9px] text-[12px] leading-[1.5] text-text"
                   >
-                    <span className="mt-px flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full border border-accent/30 bg-[var(--accent-dim)] font-mono text-[9px] text-accent">
+                    <span className="mt-px flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full border border-accent/30 bg-[var(--accent-dim)] text-[12px] text-accent">
                       {i + 1}
                     </span>
                     <span>{s}</span>
@@ -105,7 +105,7 @@ export default async function ReportDetailPage({
           {tools && tools.length > 0 && (
             <Card className="px-4 py-3">
               <SectionLabel>Tools needed</SectionLabel>
-              <p className="font-mono text-[12px] leading-[1.6] text-accent">{tools.join(' · ')}</p>
+              <p className="text-[13px] leading-[1.6] text-accent">{tools.join(' · ')}</p>
             </Card>
           )}
 

@@ -38,10 +38,10 @@ function Result({
   hint: string;
 }) {
   return (
-    <div className="rounded-[4px] border border-border2 bg-bg3 px-4 py-3">
+    <div className="rounded-lg border border-border2 bg-bg3 px-4 py-3">
       <div className="flex items-baseline justify-between gap-3">
-        <div className="font-mono text-[8px] uppercase tracking-[0.12em] text-text3">{label}</div>
-        <div className="font-mono text-[9px] text-text3">
+        <div className="text-[11px] font-medium uppercase tracking-[0.05em] text-text3">{label}</div>
+        <div className="text-[12px] text-text3">
           {satEmpty ? (
             'sat —'
           ) : satTemp === null ? (
@@ -54,7 +54,7 @@ function Result({
       <div className="mt-1 font-mono text-[28px] font-bold tabular-nums text-accent">
         {fmt(value)}
       </div>
-      <div className="mt-1 text-[10px] text-text3">{hint}</div>
+      <div className="mt-1 text-[12px] text-text3">{hint}</div>
     </div>
   );
 }
@@ -192,7 +192,7 @@ export function RefrigerantCalculator() {
         </div>
       </Card>
 
-      <p className="px-1 text-[10px] text-text3">
+      <p className="px-1 text-[12px] text-text3">
         Saturation temps are looked up from the refrigerant&apos;s pressure-temperature
         chart (gauge psig). The low side uses the dew point and the high side the bubble
         point, which matters most on high-glide blends like R-407C. Always charge to the

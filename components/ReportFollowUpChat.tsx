@@ -69,7 +69,7 @@ export function ReportFollowUpChat({
           <p className="mt-1 text-[12px] leading-[1.5] text-text2">{finding}</p>
         )}
         {firstStep && (
-          <p className="mt-2 font-mono text-[10px] text-text3">
+          <p className="mt-2 text-[12.5px] text-text3">
             First step: {firstStep}
           </p>
         )}
@@ -79,7 +79,7 @@ export function ReportFollowUpChat({
         <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
           {messages.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center py-8 text-center">
-              <p className="mb-1 font-head text-[14px] font-semibold tracking-[0.06em] text-text">
+              <p className="mb-1 text-[14px] font-semibold text-text">
                 Field assistant
               </p>
               <p className="mb-5 max-w-[360px] text-[12px] leading-[1.55] text-text2">
@@ -93,7 +93,7 @@ export function ReportFollowUpChat({
                     type="button"
                     onClick={() => sendMessage(prompt)}
                     disabled={loading}
-                    className="rounded-[4px] border border-border2 bg-bg3 px-3 py-1.5 text-left text-[11px] leading-[1.4] text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+                    className="rounded-lg border border-border2 bg-bg3 px-3 py-1.5 text-left text-[11px] leading-[1.4] text-text2 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
                   >
                     {prompt}
                   </button>
@@ -113,7 +113,7 @@ export function ReportFollowUpChat({
                       : 'border border-border2 bg-bg3 text-text'
                   }`}
                 >
-                  <div className="mb-1 font-mono text-[8px] uppercase tracking-[0.1em] text-text3">
+                  <div className="mb-1 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
                     {m.role === 'user' ? 'You' : 'T.R.A.C.E.'}
                   </div>
                   <p className="whitespace-pre-wrap">{m.content}</p>
@@ -125,7 +125,7 @@ export function ReportFollowUpChat({
           {loading && (
             <div className="flex justify-start">
               <div className="rounded-card border border-border2 bg-bg3 px-3.5 py-2.5">
-                <div className="font-mono text-[10px] text-text3">Reasoning…</div>
+                <div className="text-[12.5px] text-text3">Reasoning…</div>
               </div>
             </div>
           )}
@@ -133,7 +133,7 @@ export function ReportFollowUpChat({
         </div>
 
         {error && (
-          <div className="mx-4 mb-2 rounded-[4px] border border-danger/30 bg-[var(--red-bg)] px-3 py-2 text-[12px] text-danger">
+          <div className="mx-4 mb-2 rounded-lg border border-danger/30 bg-[var(--red-bg)] px-3 py-2 text-[12px] text-danger">
             {error}
           </div>
         )}

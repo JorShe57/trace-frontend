@@ -1,14 +1,30 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
+// Self-hosted via next/font — no render-blocking Google Fonts request.
+// Inter drives all UI text; the mono face is reserved for numeric readouts.
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  title: 'T.R.A.C.E. — Diagnostic Decision Tree',
+  title: 'TRACE — Field Diagnostics',
   description:
     'A guided HVAC/R field diagnostic tool. Walk a complaint to a likely cause, with next steps, safety flags and the tools you need.',
 };
 
 export const viewport: Viewport = {
-  themeColor: '#080808',
+  themeColor: '#09090b',
   width: 'device-width',
   initialScale: 1,
 };
@@ -18,7 +34,12 @@ const themeScript = `(function(){try{var t=localStorage.getItem('trace.theme');i
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme="dark"
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

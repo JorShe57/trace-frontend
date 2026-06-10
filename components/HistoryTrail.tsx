@@ -17,7 +17,7 @@ export function HistoryTrail({ history }: { history: HistoryEntry[] }) {
           className="flex items-start gap-2.5 rounded-[5px] border border-border bg-bg3 px-3 py-[9px] opacity-70"
         >
           <span className="flex-1 text-[11px] leading-snug text-text2">{h.question}</span>
-          <span className={`flex-shrink-0 whitespace-nowrap font-mono text-[11px] ${answerColor(h.style)}`}>
+          <span className={`flex-shrink-0 whitespace-nowrap text-[13px] ${answerColor(h.style)}`}>
             {h.answer}
           </span>
         </li>

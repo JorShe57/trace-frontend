@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getUserSession } from '@/lib/db/sessions';
 import { getNode, selectedUnit } from '@/lib/engine';
 
-export const metadata = { title: 'Field assistant · T.R.A.C.E.' };
+export const metadata = { title: 'Field assistant · TRACE' };
 
 export default async function ReportChatPage({
   params,
@@ -30,16 +30,16 @@ export default async function ReportChatPage({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-4">
-        <Link href={`/reports/${id}`} className="font-mono text-[10px] text-text3 hover:text-accent">
+        <Link href={`/reports/${id}`} className="text-[12.5px] text-text3 hover:text-accent">
           ← Back to report
         </Link>
         {unit && (
-          <span className="font-mono text-[9px] text-text3">{unit.name}</span>
+          <span className="text-[12px] text-text3">{unit.name}</span>
         )}
       </div>
 
       <div className="mb-5">
-        <h1 className="font-head text-[22px] font-bold tracking-[0.06em] text-text">
+        <h1 className="text-[20px] font-semibold tracking-[-0.02em] text-text">
           Continue with AI
         </h1>
         <p className="mt-1 text-[12px] text-text2">

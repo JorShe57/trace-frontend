@@ -26,10 +26,10 @@ export function AppNav() {
           <Link
             key={link.href}
             href={link.href}
-            className={`rounded-[3px] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] transition-colors ${
+            className={`rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-colors ${
               active
-                ? 'border border-accent/40 bg-[var(--accent-dim)] text-accent'
-                : 'border border-transparent text-text3 hover:text-text2'
+                ? 'bg-bg4 text-text'
+                : 'text-text3 hover:bg-bg3 hover:text-text2'
             }`}
           >
             {link.label}

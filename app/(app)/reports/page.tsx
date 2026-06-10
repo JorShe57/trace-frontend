@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { listUserSessions, type StoredSession } from '@/lib/db/sessions';
 import { getNode, selectedUnit } from '@/lib/engine';
 
-export const metadata = { title: 'Reports · T.R.A.C.E.' };
+export const metadata = { title: 'Reports · TRACE' };
 
 function title(s: StoredSession): string {
   if (s.title) return s.title;
@@ -41,7 +41,7 @@ export default async function ReportsPage() {
               >
                 <Link href={`/reports/${s.id}`} className="min-w-0 flex-1">
                   <div className="truncate text-[13px] text-text">{title(s)}</div>
-                  <div className="mt-0.5 font-mono text-[9px] text-text3">
+                  <div className="mt-0.5 text-[12px] text-text3">
                     {[unit ? unit.name : null, new Date(s.created_at).toLocaleString()]
                       .filter(Boolean)
                       .join(' · ')}

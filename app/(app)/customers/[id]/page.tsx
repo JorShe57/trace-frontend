@@ -6,7 +6,7 @@ import type { Customer, Equipment, Site } from '@/lib/db/types';
 import { UNIT_TYPE_OPTIONS } from '@/lib/unit-types';
 import { createEquipment, createSite, deleteCustomer } from '../actions';
 
-export const metadata = { title: 'Customer · T.R.A.C.E.' };
+export const metadata = { title: 'Customer · TRACE' };
 
 export default async function CustomerDetailPage({
   params,
@@ -37,15 +37,15 @@ export default async function CustomerDetailPage({
   return (
     <div>
       <div className="mb-4">
-        <Link href="/customers" className="font-mono text-[10px] text-text3 hover:text-accent">
+        <Link href="/customers" className="text-[12.5px] text-text3 hover:text-accent">
           ← Customers
         </Link>
       </div>
 
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-head text-[24px] font-bold tracking-[0.06em] text-text">{customer.name}</h1>
-          <div className="mt-1 font-mono text-[10px] text-text3">
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-text">{customer.name}</h1>
+          <div className="mt-1 text-[12.5px] text-text3">
             {[customer.contact_name, customer.phone, customer.email].filter(Boolean).join(' · ') ||
               'No contact info'}
           </div>
@@ -76,7 +76,7 @@ export default async function CustomerDetailPage({
             <div className="mb-2 flex items-center justify-between gap-3">
               <div>
                 <div className="text-[14px] font-semibold text-text">{site.name}</div>
-                {site.address && <div className="font-mono text-[9px] text-text3">{site.address}</div>}
+                {site.address && <div className="text-[12px] text-text3">{site.address}</div>}
               </div>
               <Badge>{equipBySite(site.id).length} units</Badge>
             </div>
@@ -86,10 +86,10 @@ export default async function CustomerDetailPage({
                 {equipBySite(site.id).map((e) => (
                   <li
                     key={e.id}
-                    className="rounded-[4px] border border-border2 bg-bg3 px-3 py-2 text-[12px] text-text"
+                    className="rounded-lg border border-border2 bg-bg3 px-3 py-2 text-[12px] text-text"
                   >
                     <span className="text-text">{e.label}</span>
-                    <span className="ml-2 font-mono text-[9px] text-text3">
+                    <span className="ml-2 text-[12px] text-text3">
                       {[e.manufacturer, e.model, e.serial && `SN ${e.serial}`].filter(Boolean).join(' · ')}
                     </span>
                   </li>
@@ -98,7 +98,7 @@ export default async function CustomerDetailPage({
             )}
 
             <details className="group">
-              <summary className="cursor-pointer list-none font-mono text-[10px] uppercase tracking-[0.08em] text-accent">
+              <summary className="cursor-pointer list-none text-[12.5px] font-medium text-accent">
                 + Add equipment
               </summary>
               <form action={createEquipment} className="mt-2 grid grid-cols-2 gap-2">
@@ -140,7 +140,7 @@ export default async function CustomerDetailPage({
 
         <Card className="px-4 py-3">
           <details className="group">
-            <summary className="cursor-pointer list-none font-mono text-[10px] uppercase tracking-[0.08em] text-accent">
+            <summary className="cursor-pointer list-none text-[12.5px] font-medium text-accent">
               + Add a site
             </summary>
             <form action={createSite} className="mt-2 flex flex-col gap-2">
