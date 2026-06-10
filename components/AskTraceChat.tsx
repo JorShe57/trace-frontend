@@ -1,17 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Button, Card, Textarea } from '@/components/ui';
+import { Card } from '@/components/ui';
+import {
+  ChatComposer,
+  ChatMessageRow,
+  ChatTypingIndicator,
+  type ChatMessage,
+} from '@/components/chat-ui';
 
 /* General "Ask Trace" assistant — free-form HVAC/R field Q&A. Mirrors the
    report follow-up chat, but posts to /api/ask with no saved-report context.
    An optional initialQuestion (e.g. from a ?q= deep link on the dashboard) is
    auto-sent once on mount. */
-
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
 
 const STARTER_PROMPTS = [
   'How do I test a thermocouple?',
@@ -46,6 +47,7 @@ export function AskTraceChat({
     setInput('');
     setError(null);
     setLoading(true);
+    requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }));
 
     try {
       const res = await fetch('/api/ask', {
@@ -75,7 +77,7 @@ export function AskTraceChat({
   return (
     <Card className="flex flex-col">
       <div
-        className="flex-1 space-y-4 overflow-y-auto px-4 py-4"
+        className="flex-1 space-y-5 overflow-y-auto px-5 py-5"
         style={{ minHeight }}
       >
         {messages.length === 0 ? (
@@ -102,34 +104,10 @@ export function AskTraceChat({
             </div>
           </div>
         ) : (
-          messages.map((m, i) => (
-            <div
-              key={i}
-              className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-[85%] rounded-card px-3.5 py-2.5 text-[13px] leading-[1.55] ${
-                  m.role === 'user'
-                    ? 'border border-accent/30 bg-[var(--accent-dim)] text-text'
-                    : 'border border-border2 bg-bg3 text-text'
-                }`}
-              >
-                <div className="mb-1 text-[11px] font-medium uppercase tracking-[0.05em] text-text3">
-                  {m.role === 'user' ? 'You' : 'T.R.A.C.E.'}
-                </div>
-                <p className="whitespace-pre-wrap">{m.content}</p>
-              </div>
-            </div>
-          ))
+          messages.map((m, i) => <ChatMessageRow key={i} message={m} />)
         )}
 
-        {loading && (
-          <div className="flex justify-start">
-            <div className="rounded-card border border-border2 bg-bg3 px-3.5 py-2.5">
-              <div className="text-[12.5px] text-text3">Reasoning…</div>
-            </div>
-          </div>
-        )}
+        {loading && <ChatTypingIndicator />}
         <div ref={bottomRef} />
       </div>
 
@@ -139,31 +117,13 @@ export function AskTraceChat({
         </div>
       )}
 
-      <form
-        className="flex gap-2 border-t border-border px-4 py-3"
-        onSubmit={(e) => {
-          e.preventDefault();
-          sendMessage(input);
-        }}
-      >
-        <Textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask a field question — e.g. how do I test a thermocouple?"
-          rows={2}
-          disabled={loading}
-          className="resize-none"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              sendMessage(input);
-            }
-          }}
-        />
-        <Button type="submit" disabled={loading || !input.trim()} className="self-end">
-          Send
-        </Button>
-      </form>
+      <ChatComposer
+        input={input}
+        onInputChange={setInput}
+        onSend={() => sendMessage(input)}
+        disabled={loading}
+        placeholder="Ask a field question — e.g. how do I test a thermocouple?"
+      />
     </Card>
   );
 }
